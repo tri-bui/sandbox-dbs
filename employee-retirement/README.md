@@ -11,7 +11,7 @@ This miniproject explores creating a SQL database and tables using PostgreSQL. T
 6. Export new tables to CSV files
 
 ### Data
-- [Data schema](data/raw/erd/ERD.png)
+- ![Data schema](data/raw/erd/ERD.png)
 
 ### Analysis
 
