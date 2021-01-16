@@ -1,6 +1,8 @@
 # Employee Retirement Analysis
 
-This miniproject explores creating a SQL database and tables using PostgreSQL. The data being used is fictional company data consisting of 6 datasets (described in the data section below). The following steps outline the workflow of this project:
+A fictional company wants to do a review of their employees to get an idea of how many employees will be retiring. This way, they can plan the amount of new hires to look for. The data being used is fictional company data consisting of 6 datasets (described in the data section below).
+
+This miniproject explores creating a SQL database and tables using PostgreSQL. The following steps outline the workflow of this project:
 1. Create an entity relationship diagram (ERD) with QuickDBD to visualize the data schema
 2. Create a new database on pgAdmin
 3. Create empty tables for each of the 6 datasets based on the schema
