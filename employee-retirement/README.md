@@ -12,7 +12,7 @@ This miniproject explores creating a SQL database and tables using PostgreSQL. T
 
 ### Data
 ![Data schema](data/raw/erd/ERD.png)
-##### This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/).
+This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/).
 
 ### Analysis
 
