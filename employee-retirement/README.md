@@ -14,6 +14,13 @@ This miniproject explores creating a SQL database and tables using PostgreSQL. T
 ![Data schema](data/raw/erd/ERD.png)<br />
 This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/).
 
+- `departments.csv` - all departments in the company
+- `employees.csv` - general information for all company employees
+- `dept_managers.csv` - department managers (a department may be recorded more than once if it gets a new manager)
+- `dept_employees.csv` - department employees (an employee may be recorded more than once if the employee switches to a new department)
+- `salaries.csv` - employee salaries (employees may be recorded more than once if their salary changes)
+- `titles.csv` - employee titles (employees may be recorded more than once if their title changes)
+
 ### Analysis
 
 ### Tools used
