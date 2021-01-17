@@ -11,7 +11,7 @@ This miniproject explores creating a SQL database and tables using PostgreSQL. T
 6. Export new tables to CSV files
 
 ### Data
-![Data schema](data/raw/erd/ERD.png)<br />
+![Data schema](data/raw/quickdbd/ERD.png)<br />
 This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/).
 
 - `departments.csv` - all departments in the company
