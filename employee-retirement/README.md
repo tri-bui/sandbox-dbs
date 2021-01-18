@@ -12,7 +12,7 @@ This miniproject explores creating a SQL database and tables using PostgreSQL. T
 
 ### Data
 ![Data schema](data/raw/quickdbd/ERD.png)<br />
-This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/).
+This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/). All files in the `data/raw/quickdbd/` directory were exported from QuickDBD.
 
 - `departments.csv` - all departments in the company
 - `employees.csv` - general information for all company employees
@@ -22,6 +22,7 @@ This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/).
 - `titles.csv` - employee titles (employees may be recorded more than once if their title changes)
 
 ### Analysis
+
 
 ### Tools used
 - [QuickDBD](https://www.quickdatabasediagrams.com/) - a web application for creating ERDs
