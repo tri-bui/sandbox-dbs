@@ -21,6 +21,8 @@ This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/). Al
 - `salaries.csv` - employee salaries (employees may be recorded more than once if their salary changes)
 - `titles.csv` - employee titles (employees may be recorded more than once if their title changes)
 
+These tables were created in the database with the code in `schema.sql`. As stated in the comment at the top, uncomment that code block to drop the tables before recreating them.
+
 ### Analysis
 
 

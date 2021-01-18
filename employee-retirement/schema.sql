@@ -1,4 +1,4 @@
-/*
+/* Uncomment this code block to drop tables before recreating them
 -- Drop all tables
 DROP TABLE titles CASCADE;
 DROP TABLE salaries CASCADE;
