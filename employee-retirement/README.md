@@ -1,6 +1,6 @@
 # Employee Retirement Analysis
 
-A fictional company wants to do a review of their employees to get an idea of how many employees will be retiring. This way, they can plan the amount of new hires to look for. The data being used is fictional company data consisting of 6 datasets (described in the data section below).
+A fictional company wants to do a review of their employees to get an idea of how many employees will be retiring. This way, the company can prepare retirement packages for retiring employees and recruiting of new hires to take their place. As a guideline, employees born between 1952 and 1955 will begin to retire and only employees hired between 1985 and 1988 are eligible for the retirement package. The data being used is fictional company data consisting of 6 datasets (described in the data section below).
 
 This miniproject explores creating a SQL database and tables using PostgreSQL. The following steps outline the workflow of this project:
 1. Create an entity relationship diagram (ERD) with QuickDBD to visualize the data schema
@@ -24,7 +24,8 @@ This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/). Al
 These tables were created in the database with the code in `schema.sql`. As stated in the comment at the top, uncomment that code block to drop the tables before recreating them.
 
 ### Analysis
-
+The analysis of retiring employees in `analysis.sql` consists of queries that output the results to a new table in the database, which is then exported as a CSV file to `data/retirement-analysis/`. The queries performed answer the following questions:
+1. Which current employees will be retiring and are eligible for the retirement package?
 
 ### Tools used
 - [QuickDBD](https://www.quickdatabasediagrams.com/) - a web application for creating ERDs
