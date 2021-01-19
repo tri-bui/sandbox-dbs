@@ -26,6 +26,10 @@ These tables were created in the database with the code in `schema.sql`. As stat
 ### Analysis
 The analysis of retiring employees in `analysis.sql` consists of queries that output the results to a new table in the database, which is then exported as a CSV file to `data/retirement-analysis/`. The queries performed answer the following questions:
 1. Which current employees will be retiring and are eligible for the retirement package?
+2. What is the most current title and salary of these employees?
+3. How many employees from each department will be retiring?
+4. What are the titles of the retiring employees and how many of each are there?
+5. Who are the current department managers?
 
 ### Tools used
 - [QuickDBD](https://www.quickdatabasediagrams.com/) - a web application for creating ERDs

@@ -71,9 +71,23 @@ ORDER BY 3 DESC;
 
 -- Test query
 SELECT * FROM retiring_dept;
+		
+
+-- -- Drop retiring_pos table
+-- DROP TABLE retiring_pos CASCADE;
+
+-- Count retiring employees by department
+SELECT title, COUNT(*)
+INTO retiring_pos -- save query results into table
+FROM retiring_full
+GROUP BY title
+ORDER BY 2 DESC;
+
+-- Test query
+SELECT * FROM retiring_pos;
 
 
--- -- Drop dept_info table
+-- -- Drop manager_info table
 -- DROP TABLE manager_info CASCADE;
 
 -- Get info on each department's manager
