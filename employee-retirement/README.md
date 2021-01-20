@@ -25,13 +25,15 @@ These tables were created in the database with the code in `schema.sql`. As stat
 
 ### Analysis
 The analysis of retiring employees in `analysis.sql` consists of queries that output the results to a new table in the database, which is then exported as a CSV file to `data/retirement-analysis/`. The queries performed answer the following questions:
-1. Which current employees will be retiring and are eligible for the retirement package?
-2. What is the most current title and salary of these employees?
-3. How many employees from each department will be retiring?
-4. What are the titles of the retiring employees and how many of each are there?
-5. Who are the current department managers?
+1. Which current employees will be retiring and are eligible for the retirement package? `retiring_emp.csv`
+2. What is the most current title and salary of these employees? `retiring_full.csv`
+3. How many employees from each department will be retiring? `retiring_dept.csv`
+4. What are the titles of the retiring employees and how many of each are there? `retiring_pos.csv`
+5. Who are the current department managers? `manager_info.csv`
 
-### Tools used
+The CSV file next to each question (all found in `data/retirement-analysis/`) contains the query results of that question.
+
+### Tools
 - [QuickDBD](https://www.quickdatabasediagrams.com/) - a web application for creating ERDs
 - [PostgreSQL 12](https://www.postgresql.org/) - one of the most popular database systems
 - [pgAdmin 4](https://www.pgadmin.org/) - a database administration interface for PostgreSQL
