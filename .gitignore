@@ -130,3 +130,9 @@ dmypy.json
 
 # Mac
 .DS_Store
+
+# Config
+config.py
+
+# Data 
+ratings.csv
