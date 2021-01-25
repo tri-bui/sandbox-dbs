@@ -4,7 +4,7 @@ import re
 import numpy as np
 import pandas as pd
 import config_vars
-import config
+from notebooks import config
 
 
 def list_to_str(obj):
