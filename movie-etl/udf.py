@@ -32,4 +32,37 @@ def filter_for_movies(movie_data):
                 ('No. of episodes' not in movie)]
 
 
+def clean_movie(movie_dict, keys_to_rename=config_vars.keys_to_rename):
+
+    """
+    Rename keys for consistency and to consolidate similar columns into 1. All 
+    other keys not in the list are dropped from the data.
+
+    Parameters
+    ----------
+    movie_dict : dict
+        Record to clean
+    keys_to_rename : dict, optional
+        mapping of old key name to new key name, by default `keys_to_rename` 
+        from `config_vars` module
+
+    Returns
+    -------
+    Dict
+        Clean movie record
+    """
+    
+    # Create empty dictionary to hold clean data
+    clean_dict = {}
+    
+    # Add keys to dictionary
+    for old, new in keys_to_rename.items():
+        if old in movie_dict:
+            clean_dict[new] = movie_dict[old]
+        
+    return clean_dict
+
+
+def drop_duplicates():
+
     

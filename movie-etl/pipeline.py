@@ -3,11 +3,13 @@ import json
 import re
 import numpy as np
 import pandas as pd
+
+import udf
 import config_vars
 from notebooks import config
 
 
-def extract_data(file_path, file_type='csv'):
+def extract(file_path, file_type='csv'):
 
     """
     Args:
@@ -55,18 +57,29 @@ def extract_data(file_path, file_type='csv'):
     return data
 
 
-def transform_data():
+def transform():
 
     
 
     pass
 
 
-def load_data():
+def load():
 
     
 
     pass
+
+
+def clean_wiki_movies(wiki_movies):
+
+    # Filter for movies
+    movies = udf.filter_for_movies(wiki_movies)
+
+    # Clean movies
+    movies = [udf.clean_movie(movie) for movie in movies]
+
+    return movies
 
 
 def etl_pipeline():
@@ -77,6 +90,13 @@ def etl_pipeline():
 
 
 if __name__ == '__main__':
-    path = '/Users/tribui/Desktop/Trilogy/DV/8-ETL/movietl/data/raw/wikipedia.movies.json'
-    data = extract_data(path, 'json')
-    print(clean_wikipedia_movies_data(data))
+    path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/raw/wikipedia.movies.json'
+    data = extract(path, 'json')
+    print(len(data))
+
+    data_filtered = udf.filter_for_movies(data)
+    print(len(data_filtered))
+
+    print(udf.clean_movie(data_filtered[0]))
+    print(udf.clean_movie(data_filtered[100]))
+    print(udf.clean_movie(data_filtered[1000]))
