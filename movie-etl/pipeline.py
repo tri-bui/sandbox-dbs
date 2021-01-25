@@ -76,8 +76,12 @@ def clean_wiki_movies(wiki_movies):
     # Filter for movies
     movies = udf.filter_for_movies(wiki_movies)
 
-    # Clean movies
+    # Clean movies and convert to dataframe
     movies = [udf.clean_movie(movie) for movie in movies]
+    movies_df = pd.DataFrame(movies)
+
+    # Drop duplicate rows
+    movies_df = udf.drop_duplicates(movies_df)
 
     return movies
 
