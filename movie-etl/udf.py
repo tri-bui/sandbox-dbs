@@ -158,6 +158,63 @@ def release_date_to_dt(release_date):
     return release_date
 
 
+def budget_to_num(budget):
+
+    """
+    Parse `budget` in the Wikipedia data and convert it to numeric type.
+
+    Parameters
+    ----------
+    budget : Pandas series[obj]
+        `budget` column in the Wikipedia data
+
+    Returns
+    -------
+    Pandas series[float]
+        `budget` column as numeric
+    """
+
+    pass
+
+
+def box_office_to_num(box_office):
+
+    """
+    Parse `box_office` in the Wikipedia data and convert it to numeric type.
+
+    Parameters
+    ----------
+    box_office : Pandas series[obj]
+        `box_office` column in the Wikipedia data
+
+    Returns
+    -------
+    Pandas series[float]
+        `box_office` column as numeric
+    """
+
+    pass
+
+
+def duration_to_num(duration):
+
+    """
+    Parse `duration` in the Wikipedia data and convert it to numeric type.
+
+    Parameters
+    ----------
+    duration : Pandas series[obj]
+        `duration` column in the Wikipedia data
+
+    Returns
+    -------
+    Pandas series[float]
+        `duration` column as numeric
+    """
+
+    pass
+
+
 def recast_wiki_columns(wiki_data):
 
     """
