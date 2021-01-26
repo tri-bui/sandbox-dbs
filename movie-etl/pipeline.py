@@ -83,7 +83,10 @@ def clean_wiki_movies(wiki_movies):
     # Drop duplicate rows
     movies_df = udf.drop_duplicates(movies_df)
 
-    return movies
+    # Recast columns to appropriate data types
+    movies_df = udf.recast_wiki_columns(movies_df)
+
+    return movies_df
 
 
 def etl_pipeline():
@@ -101,6 +104,4 @@ if __name__ == '__main__':
     data_filtered = udf.filter_for_movies(data)
     print(len(data_filtered))
 
-    print(udf.clean_movie(data_filtered[0]))
-    print(udf.clean_movie(data_filtered[100]))
-    print(udf.clean_movie(data_filtered[1000]))
+    print(clean_wiki_movies(data_filtered).info())
