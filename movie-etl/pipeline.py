@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 import clean_wikipedia_data as clean_wiki
+import misc_functions as misc
 from notebooks import config
 
 
@@ -78,7 +79,7 @@ def clean_wiki_movies(wiki_movies):
     movies_df = pd.DataFrame(movies)
 
     # Drop duplicate rows
-    movies_df = clean_wiki.drop_duplicates(movies_df)
+    movies_df = misc.drop_duplicates(movies_df)
 
     # Recast columns to appropriate data types
     movies_df = clean_wiki.recast_wiki_columns(movies_df)
