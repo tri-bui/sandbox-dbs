@@ -85,7 +85,6 @@ def clean_wiki_movies(wiki_movies):
 
     # Recast columns to appropriate data types
     movies_df = udf.recast_wiki_columns(movies_df)
-
     return movies_df
 
 

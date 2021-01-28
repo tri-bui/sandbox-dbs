@@ -135,7 +135,7 @@ def release_date_to_dt(release_date):
     Returns
     -------
     Pandas series[datetime]
-        `release_date` column as datetime
+        `release_date` column as a datetime type
     """
 
     # Convert all values to strings
@@ -165,8 +165,8 @@ def parse_budget(s):
 
     Parameters
     ----------
-    s : str
-        Strinng `budget` value
+    s : str or float
+        String `budget` value
 
     Returns
     -------
@@ -202,7 +202,7 @@ def budget_to_num(budget):
     Returns
     -------
     Pandas series[float]
-        `budget` column as numeric
+        `budget` column as a numeric type
     """
 
     # Convert all values to strings
@@ -235,13 +235,13 @@ def parse_box_office(s):
 
     Parameters
     ----------
-    s : [type]
-        [description]
+    s : str or float
+        String `box_office` value
 
     Returns
     -------
-    [type]
-        [description]
+    Float
+        Float `box_office` value
     """
     
     # Null check
@@ -291,15 +291,48 @@ def box_office_to_num(box_office):
 
     # Replace values not captured by these formats with NaN
     contains = box_office.dropna().str.contains(formats, flags=re.IGNORECASE)
-    print(box_office.dropna()[~contains].unique()) # DELETE
     for val in box_office.dropna()[~contains].unique():
         box_office.replace(val, np.NaN, inplace=True)
-    print(box_office.dropna()[~contains]) # DELETE
 
     # Parse amount from string
     box_office = box_office.str.extract(formats, flags=re.IGNORECASE)[0]
     box_office = box_office.apply(parse_box_office)
     return box_office
+
+
+def parse_duration(s):
+    
+    """
+    Parse a `duration` string and convert it to an integer.
+
+    Parameters
+    ----------
+    s : str or float
+        String `duration` value
+
+    Returns
+    -------
+    Int
+        Integer `duration` value
+    """
+    
+    # Null check
+    if isinstance(s, float):
+        return s
+    
+    # Remove seconds, "m", and spaces
+    s = re.sub(r'\:\s*\d{1,2}', '', s)
+    s = re.sub(r'm|\s*', '', s, flags=re.IGNORECASE)
+    
+    # Convert to int
+    match = re.search(r'(\d)(ho?u?r?s?)(\d\d?)?', s, flags=re.IGNORECASE)
+    if match: # if time is in hours
+        i = int(match.group(1)) * 60 # hours to minutes
+        if match.group(3):
+            i += int(match.group(3)) # add minutes
+    else: # if time is in minutes
+        i = int(s)
+    return i
 
 
 def duration_to_num(duration):
@@ -318,7 +351,29 @@ def duration_to_num(duration):
         `duration` column as numeric
     """
 
-    pass
+    # Convert all values to strings
+    duration = duration.apply(obj_to_str)
+
+    # Clean string and select lower limit of duration ranges
+    duration = duration.str.strip().str.replace(r'\[\d\]', '', regex=True) \
+                                   .str.replace(r'[-–—]\s?\d+', '', regex=True)
+
+    # Duration formats
+    format1 = r'(?:\d\s*ho?u?r?s?\s*)?\d{1,3}\s*m'
+    format2 = r'\d\s*ho?u?r?s?|\d{1,2}\s*\:\s*\d{1,2}'
+    formats = f'({format1}|{format2})'
+
+    # Replace values not captured by these formats with NaN
+    contains = duration.dropna().str.contains(formats, flags=re.IGNORECASE)
+    print(duration.dropna()[~contains].unique()) # DELETE
+    for val in duration.dropna()[~contains].unique():
+        duration.replace(val, np.NaN, inplace=True)
+    print(duration.dropna()[~contains]) # DELETE
+
+    # Parse duration from string
+    duration = duration.str.extract(formats, flags=re.IGNORECASE)[0]
+    duration = duration.apply(parse_duration)
+    return duration
 
 
 def recast_wiki_columns(wiki_data):
@@ -345,4 +400,5 @@ def recast_wiki_columns(wiki_data):
     wiki_data['release_date'] = release_date_to_dt(wiki_data['release_date'])
     wiki_data['budget'] = budget_to_num(wiki_data['budget'])
     wiki_data['box_office'] = box_office_to_num(wiki_data['box_office'])
+    wiki_data['duration'] = duration_to_num(wiki_data['duration'])
     return wiki_data
