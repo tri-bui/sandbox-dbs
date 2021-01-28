@@ -4,7 +4,7 @@ import re
 import numpy as np
 import pandas as pd
 
-import udf
+import clean_wikipedia_data as clean_wiki
 import config_vars
 from notebooks import config
 
@@ -74,17 +74,17 @@ def load():
 def clean_wiki_movies(wiki_movies):
 
     # Filter for movies
-    movies = udf.filter_for_movies(wiki_movies)
+    movies = clean_wiki.filter_for_movies(wiki_movies)
 
     # Clean movies and convert to dataframe
-    movies = [udf.clean_movie(movie) for movie in movies]
+    movies = [clean_wiki.clean_movie(movie) for movie in movies]
     movies_df = pd.DataFrame(movies)
 
     # Drop duplicate rows
-    movies_df = udf.drop_duplicates(movies_df)
+    movies_df = clean_wiki.drop_duplicates(movies_df)
 
     # Recast columns to appropriate data types
-    movies_df = udf.recast_wiki_columns(movies_df)
+    movies_df = clean_wiki.recast_wiki_columns(movies_df)
     return movies_df
 
 
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     data = extract(path, 'json')
     print(len(data))
 
-    data_filtered = udf.filter_for_movies(data)
+    data_filtered = clean_wiki.filter_for_movies(data)
     print(len(data_filtered))
 
     print(clean_wiki_movies(data_filtered).info())
