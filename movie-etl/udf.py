@@ -161,7 +161,7 @@ def release_date_to_dt(release_date):
 def parse_budget(s):
 
     """
-    Parse a budget string and convert it to float type.
+    Parse a `budget` string and convert it to a float.
 
     Parameters
     ----------
@@ -219,15 +219,50 @@ def budget_to_num(budget):
 
     # Replace values not captured by these formats with NaN
     contains = budget.dropna().str.contains(formats, flags=re.IGNORECASE)
-    print(budget.dropna()[~contains].unique()) # DELETE
     for val in budget.dropna()[~contains].unique():
         budget.replace(val, np.NaN, inplace=True)
-    print(budget.dropna()[~contains]) # DELETE
 
-    # Extract amount from string
+    # Parse amount from string
     budget = budget.str.extract(formats, flags=re.IGNORECASE)[0]
     budget = budget.apply(parse_budget)
     return budget
+
+
+def parse_box_office(s):
+
+    """
+    Parse a `box_office` string and convert it to a float.
+
+    Parameters
+    ----------
+    s : [type]
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """
+    
+    # Null check
+    if isinstance(s, float):
+        return s
+    
+    # Remove $, spaces, and commas
+    s = re.sub(r'[\$\s,]', '', s).lower()
+    
+    # Convert to float
+    if 'k' in s:
+        f = float(s.replace('k', '')) * 1e3 # thousand
+    elif 'm' in s:
+        f = float(s.replace('m', '')) * 1e6 # million
+    elif 'b' in s:
+        f = float(s.replace('b', '')) * 1e9 # billion
+    elif '.' in s:
+        f = float(s.replace('.', '')) # for numbers using "." as a thousand-separator
+    else:
+        f = float(s)
+    return f
 
 
 def box_office_to_num(box_office):
@@ -246,7 +281,25 @@ def box_office_to_num(box_office):
         `box_office` column as numeric
     """
 
-    pass
+    # Convert all values to strings
+    box_office = box_office.apply(obj_to_str)
+
+    # Box office formats
+    format1 = r'\$?\s?\d{1,3}(?:\.\d+)?\s*[kmb]'
+    format2 = r'\$?\s?\d{1,3}(?:[\s\.,]?\d{3})+\$?'
+    formats = f'({format1}|{format2})'
+
+    # Replace values not captured by these formats with NaN
+    contains = box_office.dropna().str.contains(formats, flags=re.IGNORECASE)
+    print(box_office.dropna()[~contains].unique()) # DELETE
+    for val in box_office.dropna()[~contains].unique():
+        box_office.replace(val, np.NaN, inplace=True)
+    print(box_office.dropna()[~contains]) # DELETE
+
+    # Parse amount from string
+    box_office = box_office.str.extract(formats, flags=re.IGNORECASE)[0]
+    box_office = box_office.apply(parse_box_office)
+    return box_office
 
 
 def duration_to_num(duration):
@@ -291,4 +344,5 @@ def recast_wiki_columns(wiki_data):
     # Recast columns
     wiki_data['release_date'] = release_date_to_dt(wiki_data['release_date'])
     wiki_data['budget'] = budget_to_num(wiki_data['budget'])
+    wiki_data['box_office'] = box_office_to_num(wiki_data['box_office'])
     return wiki_data
