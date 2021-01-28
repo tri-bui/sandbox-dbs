@@ -158,6 +158,37 @@ def release_date_to_dt(release_date):
     return release_date
 
 
+def parse_budget(s):
+
+    """
+    Parse a budget string and convert it to float type.
+
+    Parameters
+    ----------
+    s : str
+        Strinng `budget` value
+
+    Returns
+    -------
+    Float
+        Numeric `budget` value
+    """
+    
+    # Null check
+    if isinstance(s, float):
+        return s
+    
+    # Remove $, spaces, and commas
+    s = re.sub(r'[\$\s,]', '', s).lower()
+    
+    # Convert to float
+    if 'mil' in s:
+        f = float(s.replace('mil', '')) * 1e6 # million
+    else:
+        f = float(s)
+    return f
+
+
 def budget_to_num(budget):
 
     """
@@ -174,7 +205,29 @@ def budget_to_num(budget):
         `budget` column as numeric
     """
 
-    pass
+    # Convert all values to strings
+    budget = budget.apply(obj_to_str)
+
+    # Clean string and select lower limit of amount ranges
+    budget = budget.str.strip().str.replace(r'\[\s*(?:\w+\s*)*\]', '', regex=True) \
+                               .str.replace(r'[-–—]\s?\$?\d+', '', regex=True)
+
+    # Budget formats
+    format1 = r'\$?\s?\d{1,3}(?:\.\d+)?\s*mil'
+    format2 = r'\$?\s?\d{1,3}(?:,\d{3})+'
+    formats = f'({format1}|{format2})'
+
+    # Replace values not captured by these formats with NaN
+    contains = budget.dropna().str.contains(formats, flags=re.IGNORECASE)
+    print(budget.dropna()[~contains].unique()) # DELETE
+    for val in budget.dropna()[~contains].unique():
+        budget.replace(val, np.NaN, inplace=True)
+    print(budget.dropna()[~contains]) # DELETE
+
+    # Extract amount from string
+    budget = budget.str.extract(formats, flags=re.IGNORECASE)[0]
+    budget = budget.apply(parse_budget)
+    return budget
 
 
 def box_office_to_num(box_office):
@@ -237,4 +290,5 @@ def recast_wiki_columns(wiki_data):
 
     # Recast columns
     wiki_data['release_date'] = release_date_to_dt(wiki_data['release_date'])
+    wiki_data['budget'] = budget_to_num(wiki_data['budget'])
     return wiki_data
