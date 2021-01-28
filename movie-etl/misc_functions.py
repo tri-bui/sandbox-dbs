@@ -1,10 +1,8 @@
-import datetime
-import json
-import re
 import numpy as np
 import pandas as pd
-import config_vars
-from notebooks import config
+
+
+""" ### CLEANING FUNCTIONS ### """
 
 
 def drop_duplicates(movies_df):

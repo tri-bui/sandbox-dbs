@@ -1,11 +1,8 @@
-import datetime
 import json
-import re
 import numpy as np
 import pandas as pd
 
 import clean_wikipedia_data as clean_wiki
-import config_vars
 from notebooks import config
 
 
