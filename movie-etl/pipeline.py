@@ -116,5 +116,6 @@ if __name__ == '__main__':
     # Kaggle data
     kaggle_df = extract(path + kaggle_file) # extract
     kaggle_df = clean_kaggle_movies(kaggle_df) # clean
+    print(kaggle_df.info())
 
 
