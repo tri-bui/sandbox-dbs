@@ -86,6 +86,14 @@ def clean_wiki_movies(wiki_movies):
     return movies_df
 
 
+def clean_kaggle_movies(movies_df):
+
+    # Drop duplicate rows
+    movies_df = misc.drop_duplicates(movies_df)
+
+    return movies_df
+
+
 def etl_pipeline():
 
     
@@ -94,11 +102,19 @@ def etl_pipeline():
 
 
 if __name__ == '__main__':
-    path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/raw/wikipedia.movies.json'
-    data = extract(path, 'json')
-    print(len(data))
 
-    data_filtered = clean_wiki.filter_for_movies(data)
-    print(len(data_filtered))
+    # Data paths
+    path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/raw/'
+    wiki_file = 'wikipedia.movies.json'
+    kaggle_file = 'movies_metadata.csv'
+    rating_file = 'ratings.csv'
 
-    print(clean_wiki_movies(data_filtered).info())
+    # Wiki data
+    wiki_data = extract(path + wiki_file, 'json') # extract
+    wiki_df = clean_wiki_movies(wiki_data) # clean
+
+    # Kaggle data
+    kaggle_df = extract(path + kaggle_file) # extract
+    kaggle_df = clean_kaggle_movies(kaggle_df) # clean
+
+

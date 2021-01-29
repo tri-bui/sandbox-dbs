@@ -28,9 +28,7 @@ def drop_duplicates(movies_df):
         movies_df['imdb_id'] = movies_df['imdb_link'].str.extract(r'(tt\d{7})')
 
     # Drop movies with an `imdb_id` of 0
-    # movies_df.drop(movies_df.query('imdb_id == "0"').index, inplace=True)
-    movies_df = movies_df[movies_df.imdb_id != '0']
-    print(movies_df['imdb_id'].count() - movies_df['imdb_id'].dropna().str.contains(r'tt\d{7}').sum()) # DELETE
+    movies_df = movies_df.query('imdb_id != "0"').copy()
 
     # Drop duplicate rows
     movies_df.drop_duplicates(subset=['imdb_id'], inplace=True)
