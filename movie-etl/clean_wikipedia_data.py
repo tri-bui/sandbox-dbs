@@ -331,10 +331,8 @@ def duration_to_num(duration):
 
     # Replace values not captured by these formats with NaN
     contains = duration.dropna().str.contains(formats, flags=re.IGNORECASE)
-    print(duration.dropna()[~contains].unique()) # DELETE
     for val in duration.dropna()[~contains].unique():
         duration.replace(val, np.NaN, inplace=True)
-    print(duration.dropna()[~contains]) # DELETE
 
     # Parse duration from string
     duration = duration.str.extract(formats, flags=re.IGNORECASE)[0]
