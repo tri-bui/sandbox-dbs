@@ -31,3 +31,6 @@ def drop_cols(movies_df):
                     'original_title', 'tagline', 'video']
     movies_df.drop(cols_to_drop, axis=1, inplace=True)
     return movies_df
+
+
+    

@@ -4,7 +4,9 @@ import pandas as pd
 import config_vars
 
 
-""" ### CLEANING FUNCTIONS ### """
+
+
+""" ### CLEANING ### """
 
 
 def filter_for_movies(movie_data):
@@ -65,7 +67,7 @@ def clean_movie(movie_dict, keys_to_rename=config_vars.keys_to_rename):
 
 
 
-""" ### DATA TYPE FUNCTIONS ### """
+""" ### PARSING ### """
 
 
 def obj_to_str(obj):
@@ -86,6 +88,114 @@ def obj_to_str(obj):
     """
 
     return ' '.join(obj) if isinstance(obj, list) else obj
+
+
+def parse_budget(s):
+
+    """
+    Parse a `budget` string and convert it to a float.
+
+    Parameters
+    ----------
+    s : str or float
+        String `budget` value
+
+    Returns
+    -------
+    Float
+        Numeric `budget` value
+    """
+    
+    # Null check
+    if isinstance(s, float):
+        return s
+    
+    # Remove $, spaces, and commas
+    s = re.sub(r'[\$\s,]', '', s).lower()
+    
+    # Convert to float
+    if 'mil' in s:
+        f = float(s.replace('mil', '')) * 1e6 # million
+    else:
+        f = float(s)
+    return f
+
+
+def parse_box_office(s):
+
+    """
+    Parse a `box_office` string and convert it to a float.
+
+    Parameters
+    ----------
+    s : str or float
+        String `box_office` value
+
+    Returns
+    -------
+    Float
+        Float `box_office` value
+    """
+    
+    # Null check
+    if isinstance(s, float):
+        return s
+    
+    # Remove $, spaces, and commas
+    s = re.sub(r'[\$\s,]', '', s).lower()
+    
+    # Convert to float
+    if 'k' in s:
+        f = float(s.replace('k', '')) * 1e3 # thousand
+    elif 'm' in s:
+        f = float(s.replace('m', '')) * 1e6 # million
+    elif 'b' in s:
+        f = float(s.replace('b', '')) * 1e9 # billion
+    elif '.' in s:
+        f = float(s.replace('.', '')) # for numbers using "." as a thousand-separator
+    else:
+        f = float(s)
+    return f
+
+
+def parse_duration(s):
+    
+    """
+    Parse a `duration` string and convert it to an integer.
+
+    Parameters
+    ----------
+    s : str or float
+        String `duration` value
+
+    Returns
+    -------
+    Int
+        Integer `duration` value
+    """
+    
+    # Null check
+    if isinstance(s, float):
+        return s
+    
+    # Remove seconds, "m", and spaces
+    s = re.sub(r'\:\s*\d{1,2}', '', s)
+    s = re.sub(r'm|\s*', '', s, flags=re.IGNORECASE)
+    
+    # Convert to int
+    match = re.search(r'(\d)(ho?u?r?s?)(\d\d?)?', s, flags=re.IGNORECASE)
+    if match: # if time is in hours
+        i = int(match.group(1)) * 60 # hours to minutes
+        if match.group(3):
+            i += int(match.group(3)) # add minutes
+    else: # if time is in minutes
+        i = int(s)
+    return i
+
+
+
+
+""" ### RECASTING ### """
 
 
 def release_date_to_dt(release_date):
@@ -122,37 +232,6 @@ def release_date_to_dt(release_date):
     # Convert column to datetime type
     release_date = pd.to_datetime(release_date, infer_datetime_format=True)
     return release_date
-
-
-def parse_budget(s):
-
-    """
-    Parse a `budget` string and convert it to a float.
-
-    Parameters
-    ----------
-    s : str or float
-        String `budget` value
-
-    Returns
-    -------
-    Float
-        Numeric `budget` value
-    """
-    
-    # Null check
-    if isinstance(s, float):
-        return s
-    
-    # Remove $, spaces, and commas
-    s = re.sub(r'[\$\s,]', '', s).lower()
-    
-    # Convert to float
-    if 'mil' in s:
-        f = float(s.replace('mil', '')) * 1e6 # million
-    else:
-        f = float(s)
-    return f
 
 
 def budget_to_num(budget):
@@ -194,43 +273,6 @@ def budget_to_num(budget):
     return budget
 
 
-def parse_box_office(s):
-
-    """
-    Parse a `box_office` string and convert it to a float.
-
-    Parameters
-    ----------
-    s : str or float
-        String `box_office` value
-
-    Returns
-    -------
-    Float
-        Float `box_office` value
-    """
-    
-    # Null check
-    if isinstance(s, float):
-        return s
-    
-    # Remove $, spaces, and commas
-    s = re.sub(r'[\$\s,]', '', s).lower()
-    
-    # Convert to float
-    if 'k' in s:
-        f = float(s.replace('k', '')) * 1e3 # thousand
-    elif 'm' in s:
-        f = float(s.replace('m', '')) * 1e6 # million
-    elif 'b' in s:
-        f = float(s.replace('b', '')) * 1e9 # billion
-    elif '.' in s:
-        f = float(s.replace('.', '')) # for numbers using "." as a thousand-separator
-    else:
-        f = float(s)
-    return f
-
-
 def box_office_to_num(box_office):
 
     """
@@ -264,41 +306,6 @@ def box_office_to_num(box_office):
     box_office = box_office.str.extract(formats, flags=re.IGNORECASE)[0]
     box_office = box_office.apply(parse_box_office)
     return box_office
-
-
-def parse_duration(s):
-    
-    """
-    Parse a `duration` string and convert it to an integer.
-
-    Parameters
-    ----------
-    s : str or float
-        String `duration` value
-
-    Returns
-    -------
-    Int
-        Integer `duration` value
-    """
-    
-    # Null check
-    if isinstance(s, float):
-        return s
-    
-    # Remove seconds, "m", and spaces
-    s = re.sub(r'\:\s*\d{1,2}', '', s)
-    s = re.sub(r'm|\s*', '', s, flags=re.IGNORECASE)
-    
-    # Convert to int
-    match = re.search(r'(\d)(ho?u?r?s?)(\d\d?)?', s, flags=re.IGNORECASE)
-    if match: # if time is in hours
-        i = int(match.group(1)) * 60 # hours to minutes
-        if match.group(3):
-            i += int(match.group(3)) # add minutes
-    else: # if time is in minutes
-        i = int(s)
-    return i
 
 
 def duration_to_num(duration):
