@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 import clean_wikipedia_data as clean_wiki
+import clean_kaggle_data as clean_kaggle
 import misc_functions as misc
 from notebooks import config
 
@@ -90,6 +91,9 @@ def clean_kaggle_movies(movies_df):
 
     # Drop duplicate rows
     movies_df = misc.drop_duplicates(movies_df)
+
+    # Filter out adult videos and drop unused columns
+    movies_df = clean_kaggle.drop_cols(movies_df)
 
     return movies_df
 
