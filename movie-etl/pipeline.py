@@ -95,6 +95,8 @@ def clean_kaggle_movies(movies_df):
     # Filter out adult videos and drop unused columns
     movies_df = clean_kaggle.drop_cols(movies_df)
 
+    # Recast columns to appropriate data types
+    movies_df = clean_kaggle.recast_cols(movies_df)
     return movies_df
 
 
@@ -116,6 +118,7 @@ if __name__ == '__main__':
     # Wiki data
     wiki_data = extract(path + wiki_file, 'json') # extract
     wiki_df = clean_wiki_movies(wiki_data) # clean
+    # print(wiki_df.info())
 
     # Kaggle data
     kaggle_df = extract(path + kaggle_file) # extract
