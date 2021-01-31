@@ -80,7 +80,7 @@ def clean_wiki_movies(wiki_movies):
     movies_df = pd.DataFrame(movies)
 
     # Drop duplicate rows
-    movies_df = clean_kaggle.drop_duplicates(movies_df)
+    movies_df = misc.drop_duplicates(movies_df)
 
     # Recast columns to appropriate data types
     movies_df = clean_wiki.recast_wiki_columns(movies_df)
@@ -90,7 +90,7 @@ def clean_wiki_movies(wiki_movies):
 def clean_kaggle_movies(movies_df):
 
     # Drop duplicate rows
-    movies_df = clean_kaggle.drop_duplicates(movies_df)
+    movies_df = misc.drop_duplicates(movies_df)
 
     # Filter out adult videos and drop unused columns
     movies_df = clean_kaggle.drop_cols(movies_df)
