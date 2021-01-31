@@ -4,7 +4,9 @@ import pandas as pd
 import config_vars
 
 
-""" ### CLEANING FUNCTIONS ### """
+
+
+""" ### CLEANING ### """
 
 
 def drop_cols(movies_df):
@@ -33,4 +35,3 @@ def drop_cols(movies_df):
     return movies_df
 
 
-    
