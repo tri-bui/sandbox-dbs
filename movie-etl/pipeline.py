@@ -108,7 +108,7 @@ def etl_pipeline():
     kaggle_file = 'movies_metadata.csv'
     rating_file = 'ratings.csv'
 
-    # Wiki data
+    # Wikipedia data
     wiki_data = extract(path + wiki_file, 'json') # extract
     wiki_df = clean_wiki_movies(wiki_data) # clean
     print(wiki_df.info())
@@ -117,6 +117,11 @@ def etl_pipeline():
     kaggle_df = extract(path + kaggle_file) # extract
     kaggle_df = clean_kaggle_movies(kaggle_df) # clean
     print(kaggle_df.info())
+
+    # Join Wikipedia and Kaggle data
+    movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 
+                         on='imdb_id', suffixes=['_wiki', '_kaggle'])
+    print(movies_df.info())
 
 
 if __name__ == '__main__':

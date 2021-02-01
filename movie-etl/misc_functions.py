@@ -35,3 +35,7 @@ def drop_duplicates(movies_df):
     # Drop duplicate rows
     movies_df.drop_duplicates(subset=['imdb_id'], inplace=True)
     return movies_df
+
+
+
+
