@@ -123,6 +123,8 @@ def etl_pipeline():
                          on='imdb_id', suffixes=['_wiki', '_kaggle'])
     print(movies_df.info())
 
+    return movies_df
+
 
 if __name__ == '__main__':
     etl_pipeline()
