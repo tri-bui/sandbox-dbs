@@ -102,13 +102,6 @@ def clean_kaggle_movies(movies_df):
 
 def etl_pipeline():
 
-    
-
-    pass
-
-
-if __name__ == '__main__':
-
     # Data paths
     path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/raw/'
     wiki_file = 'wikipedia.movies.json'
@@ -118,11 +111,14 @@ if __name__ == '__main__':
     # Wiki data
     wiki_data = extract(path + wiki_file, 'json') # extract
     wiki_df = clean_wiki_movies(wiki_data) # clean
-    # print(wiki_df.info())
+    print(wiki_df.info())
 
     # Kaggle data
     kaggle_df = extract(path + kaggle_file) # extract
     kaggle_df = clean_kaggle_movies(kaggle_df) # clean
     print(kaggle_df.info())
 
+
+if __name__ == '__main__':
+    etl_pipeline()
 
