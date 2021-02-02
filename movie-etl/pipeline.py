@@ -123,6 +123,10 @@ def etl_pipeline():
                          on='imdb_id', suffixes=['_wiki', '_kaggle'])
     print(movies_df.info())
 
+    # Drop redundant columns
+    movies_df = misc.drop_redundant_cols(movies_df)
+    print(movies_df.info())
+    
     return movies_df
 
 
