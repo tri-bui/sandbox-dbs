@@ -4,7 +4,7 @@ import pandas as pd
 
 import clean_wikipedia_data as clean_wiki
 import clean_kaggle_data as clean_kaggle
-import misc_functions as misc
+import clean_movie_data as clean_movies
 from notebooks import config
 
 
@@ -80,7 +80,7 @@ def clean_wiki_movies(wiki_movies):
     movies_df = pd.DataFrame(movies)
 
     # Drop duplicate rows
-    movies_df = misc.drop_duplicates(movies_df)
+    movies_df = clean_movies.drop_duplicates(movies_df)
 
     # Recast columns to appropriate data types
     movies_df = clean_wiki.recast_wiki_columns(movies_df)
@@ -90,7 +90,7 @@ def clean_wiki_movies(wiki_movies):
 def clean_kaggle_movies(movies_df):
 
     # Drop duplicate rows
-    movies_df = misc.drop_duplicates(movies_df)
+    movies_df = clean_movies.drop_duplicates(movies_df)
 
     # Filter out adult videos and drop unused columns
     movies_df = clean_kaggle.drop_cols(movies_df)
@@ -123,10 +123,11 @@ def etl_pipeline():
                          on='imdb_id', suffixes=['_wiki', '_kaggle'])
     print(movies_df.info())
 
-    # Drop redundant columns
-    movies_df = misc.drop_redundant_cols(movies_df)
+    # Clean columns
+    movies_df = clean_movies.drop_redundant_cols(movies_df) # drop redundant columns
+    movies_df = clean_movies.clean_cols(movies_df) # rename and reorder columns
     print(movies_df.info())
-    
+
     return movies_df
 
 
