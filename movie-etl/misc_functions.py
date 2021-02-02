@@ -107,3 +107,9 @@ def drop_redundant_cols(movies_df):
     for pair in redundant_pairs:
         movies_df = filla_dropb(pair[0], pair[1], movies_df)
     return movies_df
+
+
+def rename_cols(col_order, col_names, movies_df):
+
+
+    pass
