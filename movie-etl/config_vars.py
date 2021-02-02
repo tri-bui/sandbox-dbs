@@ -13,7 +13,6 @@ keys_to_rename = {
     'Edited by': 'editors',
     'Editor(s)': 'editors',
     'Length': 'duration',
-    'Original language(s)': 'languages', 
     'Original release': 'release_date',
     'Produced by': 'producers',
     'Producer': 'producers',
@@ -27,7 +26,6 @@ keys_to_rename = {
     'Story by': 'writers',
     'Written by': 'writers',
     'imdb_link': 'imdb_link', 
-    'title': 'title',
     'url': 'url', 
     'year': 'year'
 }
