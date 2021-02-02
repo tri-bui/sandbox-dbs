@@ -1,7 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
-import config_vars
+from config_vars import keys_to_rename
 
 
 
@@ -34,7 +34,7 @@ def filter_for_movies(movie_data):
                 ('No. of episodes' not in movie)]
 
 
-def clean_movie(movie_dict, keys_to_rename=config_vars.keys_to_rename):
+def clean_movie(movie_dict, keys_to_rename=keys_to_rename):
 
     """
     Rename keys for consistency and to consolidate similar columns into 1. All 

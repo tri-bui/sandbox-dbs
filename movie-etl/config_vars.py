@@ -1,4 +1,4 @@
-# Key rename pairs (old name: new name)
+# Key rename pairs for Wikipedia data (old name: new name)
 keys_to_rename = {
     'Adaptation by': 'writers',
     'Box office': 'box_office',
@@ -32,3 +32,23 @@ keys_to_rename = {
     'url': 'url', 
     'year': 'year'
 }
+
+# Column order for joined movie data
+col_order = [
+    'id', 'imdb_id', 'imdb_link', 'url', 'poster_path', 'title', 'overview', 
+    'release_date_kaggle', 'year', 'runtime', 'budget_wiki', 'box_office', 
+    'genres', 'country', 'original_language', 'spoken_languages', 
+    'status', 'popularity', 'vote_average', 'vote_count', 
+    'writers', 'director', 'cinematographers', 'editors', 'composers', 'stars', 
+    'producers', 'production_companies', 'production_countries', 'distributor'
+]
+
+# New column names for joined movie data
+col_names = [
+    'id', 'imdb_id', 'imdb_link', 'url', 'poster_path', 'title', 'overview', 
+    'release_date', 'year', 'runtime', 'budget', 'revenue', 
+    'genres', 'country', 'language', 'spoken_languages', 
+    'status', 'popularity', 'vote_average', 'vote_count', 
+    'writers', 'director', 'cinematographers', 'editors', 'composers', 'stars', 
+    'producers', 'production_companies', 'production_countries', 'distributor'
+]

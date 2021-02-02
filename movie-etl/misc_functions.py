@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from config_vars import col_order, col_names
 
 
 
@@ -109,7 +110,32 @@ def drop_redundant_cols(movies_df):
     return movies_df
 
 
-def rename_cols(col_order, col_names, movies_df):
+def clean_cols(movies_df, col_order=col_order, col_names=col_names):
 
+    """
+    Rename columns for consistency and sort them in a logical order.
 
-    pass
+    Parameters
+    ----------
+    movies_df : Pandas dataframe
+        Joined movie data
+    col_order : list[str], optional
+        Column names in logical order, by default `col_order` from 
+        `config_vars` module
+    col_names : list[str], optional
+        New names for columns in the same order, by default `col_names` from 
+        `config_vars` module
+
+    Returns
+    -------
+    Pandas dataframe
+        Movie data with clean column names
+    """
+
+    # Column pairs to rename (old name: new name)
+    rename_pairs = {old: new for old, new in zip(col_order, col_names)}
+
+    # Rename and reorder columns
+    movies_df = movies_df.rename(rename_pairs, axis=1)
+    movies_df = movies_df[col_names]
+    return movies_df
