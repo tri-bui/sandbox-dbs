@@ -56,20 +56,6 @@ def extract(file_path, file_type='csv'):
     return data
 
 
-def transform():
-
-    
-
-    pass
-
-
-def load():
-
-    
-
-    pass
-
-
 def clean_wiki_movies(wiki_movies):
 
     # Filter for movies
@@ -100,6 +86,29 @@ def clean_kaggle_movies(movies_df):
     return movies_df
 
 
+def transform(wiki_movies, kaggle_movies):
+
+
+    # Clean movie data
+    wiki_df = clean_wiki_movies(wiki_movies)
+    kaggle_df = clean_kaggle_movies(kaggle_movies)
+
+    # Join Wikipedia and Kaggle data
+    movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 
+                         on='imdb_id', suffixes=['_wiki', '_kaggle'])
+
+    # Clean columns
+    movies_df = clean_movies.drop_redundant_cols(movies_df) # drop redundant columns
+    movies_df = clean_movies.clean_cols(movies_df) # rename and reorder columns
+
+
+def load():
+
+    
+
+    pass
+
+
 def etl_pipeline():
 
     # Data paths
@@ -108,24 +117,13 @@ def etl_pipeline():
     kaggle_file = 'movies_metadata.csv'
     rating_file = 'ratings.csv'
 
-    # Wikipedia data
-    wiki_data = extract(path + wiki_file, 'json') # extract
-    wiki_df = clean_wiki_movies(wiki_data) # clean
-    print(wiki_df.info())
+    # Extract data
+    wiki_data = extract(path + wiki_file, 'json') # Wikipedia data
+    kaggle_df = extract(path + kaggle_file) # Kaggle data
+    rating_df = extract(path + rating_file) # rating data
 
-    # Kaggle data
-    kaggle_df = extract(path + kaggle_file) # extract
-    kaggle_df = clean_kaggle_movies(kaggle_df) # clean
-    print(kaggle_df.info())
-
-    # Join Wikipedia and Kaggle data
-    movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 
-                         on='imdb_id', suffixes=['_wiki', '_kaggle'])
-    print(movies_df.info())
-
-    # Clean columns
-    movies_df = clean_movies.drop_redundant_cols(movies_df) # drop redundant columns
-    movies_df = clean_movies.clean_cols(movies_df) # rename and reorder columns
+    # Transform data
+    movies_df = transform(wiki_data, kaggle_df)
     print(movies_df.info())
 
     return movies_df
