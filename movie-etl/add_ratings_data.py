@@ -27,7 +27,7 @@ def reduce_ratings(ratings_df, movie_id, save_path):
     ratings_df['timestamp'] = pd.to_datetime(ratings_df['timestamp'], unit='s')
 
     # Filter the rating data to only the movies in the movie data
-    reduced_df = ratings_df[ratings_df['movieId'].isin(movies_df['movie_id'].values)]
+    reduced_df = ratings_df[ratings_df['movieId'].isin(movie_id)]
 
     # Save reduced rating data
     reduced_df.to_csv(save_path, index=False)

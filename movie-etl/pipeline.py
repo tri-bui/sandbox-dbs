@@ -5,6 +5,7 @@ import pandas as pd
 import clean_wikipedia_data as clean_wiki
 import clean_kaggle_data as clean_kaggle
 import clean_movie_data as clean_movies
+import add_ratings_data as add_ratings
 from notebooks import config
 
 
@@ -119,10 +120,12 @@ def etl_pipeline():
     kaggle_file = 'movies_metadata.csv'
     rating_file = 'ratings.csv'
 
-    # Extract data
+    # Extract movie data
     wiki_data = extract(path + wiki_file, 'json') # Wikipedia data
     kaggle_df = extract(path + kaggle_file) # Kaggle data
-    rating_df = extract(path + rating_file) # rating data
+
+    # Extract and reduce rating data
+    rating_df = extract(path + rating_file)
 
     # Transform data
     movies_df = transform(wiki_data, kaggle_df)
