@@ -101,6 +101,8 @@ def transform(wiki_movies, kaggle_movies):
     movies_df = clean_movies.drop_redundant_cols(movies_df) # drop redundant columns
     movies_df = clean_movies.clean_cols(movies_df) # rename and reorder columns
 
+    return movies_df
+
 
 def load():
 

@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 
 
-""" ### CLEANING ### """
-
-
 def drop_cols(movies_df):
 
     """
