@@ -13,7 +13,7 @@ def reduce_ratings(ratings_df, movie_id, save_path):
     ratings_df : Pandas dataframe
         Kaggle ratings data
     movie_id : array-like[int]
-        List of `movie_id`s in the movie data
+        List of `id`s in the movie data
     save_path : str
         Path to save the reduced rating data
 

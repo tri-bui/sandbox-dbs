@@ -115,21 +115,26 @@ def load():
 def etl_pipeline():
 
     # Data paths
-    path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/raw/'
-    wiki_file = 'wikipedia.movies.json'
-    kaggle_file = 'movies_metadata.csv'
-    rating_file = 'ratings.csv'
+    data_path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/'
+    wiki_file = 'raw/wikipedia.movies.json'
+    kaggle_file = 'raw/movies_metadata.csv'
+    ratings_file = 'raw/ratings.csv'
+    reduced_ratings_file = 'ratings_min.csv'
 
     # Extract movie data
-    wiki_data = extract(path + wiki_file, 'json') # Wikipedia data
-    kaggle_df = extract(path + kaggle_file) # Kaggle data
-
-    # Extract and reduce rating data
-    rating_df = extract(path + rating_file)
+    wiki_data = extract(data_path + wiki_file, 'json') # Wikipedia data
+    kaggle_df = extract(data_path + kaggle_file) # Kaggle data
 
     # Transform data
     movies_df = transform(wiki_data, kaggle_df)
     print(movies_df.info())
+
+    # Extract and reduce rating data
+    ratings_df = extract(data_path + ratings_file)
+    ratings_df = add_ratings.reduce_ratings(ratings_df, 
+                                            movies_df['id'].values, 
+                                            data_path + reduced_ratings_file)
+    print(ratings_df.info(null_counts=True))
 
     return movies_df
 
