@@ -4,8 +4,6 @@ import pandas as pd
 from config_vars import keys_to_rename
 
 
-
-
 """ ### CLEANING ### """
 
 
@@ -63,8 +61,6 @@ def clean_movie(movie_dict, keys_to_rename=keys_to_rename):
             clean_dict[new] = movie_dict[old]
         
     return clean_dict
-
-
 
 
 """ ### PARSING ### """
@@ -191,8 +187,6 @@ def parse_duration(s):
     else: # if time is in minutes
         i = int(s)
     return i
-
-
 
 
 """ ### RECASTING ### """

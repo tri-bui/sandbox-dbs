@@ -3,8 +3,6 @@ import pandas as pd
 from config_vars import col_order, col_names
 
 
-
-
 """ ### CLEANING ### """
 
 
