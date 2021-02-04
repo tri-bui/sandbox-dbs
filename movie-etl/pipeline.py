@@ -57,54 +57,71 @@ def extract(file_path, file_type='csv'):
     return data
 
 
-def clean_wiki_movies(wiki_movies):
+# def clean_wiki_movies(wiki_movies):
     
 
-    # Filter for movies
-    movies = clean_wiki.filter_for_movies(wiki_movies)
+#     # Filter for movies
+#     movies = clean_wiki.filter_for_movies(wiki_movies)
 
-    # Clean movies and convert to dataframe
-    movies = [clean_wiki.clean_movie(movie) for movie in movies]
-    movies_df = pd.DataFrame(movies)
+#     # Clean movies and convert to dataframe
+#     movies = [clean_wiki.clean_movie(movie) for movie in movies]
+#     movies_df = pd.DataFrame(movies)
 
-    # Drop duplicate rows
-    movies_df = clean_movies.drop_duplicates(movies_df)
+#     # Drop duplicate rows
+#     movies_df = clean_movies.drop_duplicates(movies_df)
 
-    # Recast columns to appropriate data types
-    movies_df = clean_wiki.recast_wiki_columns(movies_df)
-    return movies_df
-
-
-def clean_kaggle_movies(movies_df):
+#     # Recast columns to appropriate data types
+#     movies_df = clean_wiki.recast_wiki_columns(movies_df)
+#     return movies_df
 
 
-    # Drop duplicate rows
-    movies_df = clean_movies.drop_duplicates(movies_df)
+# def clean_kaggle_movies(movies_df):
 
-    # Filter out adult videos and drop unused columns
-    movies_df = clean_kaggle.drop_cols(movies_df)
 
-    # Recast columns to appropriate data types
-    movies_df = clean_kaggle.recast_cols(movies_df)
-    return movies_df
+#     # Drop duplicate rows
+#     movies_df = clean_movies.drop_duplicates(movies_df)
+
+#     # Filter out adult videos and drop unused columns
+#     movies_df = clean_kaggle.drop_cols(movies_df)
+
+#     # Recast columns to appropriate data types
+#     movies_df = clean_kaggle.recast_cols(movies_df)
+#     return movies_df
 
 
 def transform(wiki_movies, kaggle_movies):
 
 
     # Clean movie data
-    wiki_df = clean_wiki_movies(wiki_movies)
-    kaggle_df = clean_kaggle_movies(kaggle_movies)
+    wiki_df = clean_wiki.clean_wiki_movies(wiki_movies) # clean Wikipedia data
+    kaggle_df = clean_kaggle.clean_kaggle_movies(kaggle_movies) # clean kaggle data
+    movies_df = clean_movies.join_movie_data(wiki_df, kaggle_df) # join movie data
 
-    # Join Wikipedia and Kaggle data
-    movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 
-                         on='imdb_id', suffixes=['_wiki', '_kaggle'])
+    # # Join Wikipedia and Kaggle data
+    # movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 
+    #                      on='imdb_id', suffixes=['_wiki', '_kaggle'])
 
-    # Clean columns
-    movies_df = clean_movies.drop_redundant_cols(movies_df) # drop redundant columns
-    movies_df = clean_movies.clean_cols(movies_df) # rename and reorder columns
+    # # Clean columns
+    # movies_df = clean_movies.drop_redundant_cols(movies_df) # drop redundant columns
+    # movies_df = clean_movies.clean_cols(movies_df) # rename and reorder columns
 
-    return movies_df
+    # Rating data paths
+    data_path = '/Users/tribui/Desktop/projects/sandbox-dbs/movie-etl/data/'
+    ratings_file = 'raw/ratings.csv'
+    reduced_ratings_file = 'ratings_min.csv'
+
+    # Extract and reduce rating data
+    ratings_df = extract(data_path + ratings_file)
+    ratings_df = add_ratings.reduce_ratings(ratings_df, 
+                                            movies_df['movie_id'].values, 
+                                            data_path + reduced_ratings_file)
+    print(ratings_df.info(null_counts=True))
+
+    # Add aggregate rating counts to the movie data
+    df = add_ratings.add_rating_count(movies_df, ratings_df)
+    print(df.info())
+
+    return df
 
 
 def load():
@@ -128,18 +145,11 @@ def etl_pipeline():
     kaggle_df = extract(data_path + kaggle_file) # Kaggle data
 
     # Transform data
-    movies_df = transform(wiki_data, kaggle_df)
-    print(movies_df.info())
-
-    # Extract and reduce rating data
-    ratings_df = extract(data_path + ratings_file)
-    ratings_df = add_ratings.reduce_ratings(ratings_df, 
-                                            movies_df['id'].values, 
-                                            data_path + reduced_ratings_file)
-    print(ratings_df.info(null_counts=True))
-
-    df = add_ratings.add_rating_count(movies_df, ratings_df)
+    df = transform(wiki_data, kaggle_df)
     print(df.info())
+
+
+    
 
     return df
 

@@ -134,3 +134,16 @@ def clean_cols(movies_df, col_order=col_order, col_names=col_names):
     movies_df = movies_df.rename(rename_pairs, axis=1)
     movies_df = movies_df[col_names]
     return movies_df
+
+
+def join_movie_data(wiki_df, kaggle_df):
+
+    # Join Wikipedia and Kaggle data
+    movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 
+                         on='imdb_id', suffixes=['_wiki', '_kaggle'])
+
+    # Clean columns
+    movies_df = drop_redundant_cols(movies_df) # drop redundant columns
+    movies_df = clean_cols(movies_df) # rename and reorder columns
+
+    return movies_df

@@ -1,6 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
+import clean_movie_data as clean_movies
 from config_vars import keys_to_rename
 
 
@@ -367,3 +368,25 @@ def recast_wiki_columns(wiki_data):
     wiki_data['box_office'] = box_office_to_num(wiki_data['box_office'])
     wiki_data['duration'] = duration_to_num(wiki_data['duration'])
     return wiki_data
+
+
+""" ### PIPELINE ### """
+
+
+def clean_wiki_movies(wiki_movies):
+    
+
+    # Filter for movies
+    movies = filter_for_movies(wiki_movies)
+
+    # Clean movies and convert to dataframe
+    movies = [clean_movie(movie) for movie in movies]
+    movies_df = pd.DataFrame(movies)
+
+    # Drop duplicate rows
+    movies_df = clean_movies.drop_duplicates(movies_df)
+
+    # Recast columns to appropriate data types
+    movies_df = recast_wiki_columns(movies_df)
+
+    return movies_df

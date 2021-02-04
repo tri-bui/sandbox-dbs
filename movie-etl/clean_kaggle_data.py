@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import clean_movie_data as clean_movies
 
 
 def drop_cols(movies_df):
@@ -54,4 +55,19 @@ def recast_cols(movies_df):
 
     # Recast `popularity` to float type
     movies_df['popularity'] = movies_df['popularity'].astype(float)
+    return movies_df
+
+
+def clean_kaggle_movies(movies_df):
+
+
+    # Drop duplicate rows
+    movies_df = clean_movies.drop_duplicates(movies_df)
+
+    # Filter out adult videos and drop unused columns
+    movies_df = drop_cols(movies_df)
+
+    # Recast columns to appropriate data types
+    movies_df = recast_cols(movies_df)
+    
     return movies_df
