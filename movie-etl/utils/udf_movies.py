@@ -115,11 +115,11 @@ def clean_cols(movies_df, col_order=col_order, col_names=col_names):
     movies_df : Pandas dataframe
         Joined movie data
     col_order : list[str], optional
-        Column names in logical order, by default `col_order` from 
-        `config_vars` module
+        Column names in logical order, by default `col_order` from the
+        `config.data_vars` module
     col_names : list[str], optional
         New names for columns in the same order, by default `col_names` from 
-        `config_vars` module
+        `config.data_vars` module
 
     Returns
     -------

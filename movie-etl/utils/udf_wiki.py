@@ -45,7 +45,7 @@ def clean_movie(movie_dict, keys_to_rename=keys_to_rename):
         Record to clean
     keys_to_rename : dict, optional
         mapping of old key name to new key name, by default `keys_to_rename` 
-        from `config_vars` module
+        from the `config.data_vars` module
 
     Returns
     -------
