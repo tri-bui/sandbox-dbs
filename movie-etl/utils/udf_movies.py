@@ -70,10 +70,10 @@ def drop_redundant_cols(movies_df):
 
     """
     Drop the following redundant columns:
-    [1] `release_data_wiki` - after dropping the outlier
-    [2] `revenue` - after using it to fill `box_office` missing values
-    [3] `budget_kaggle` - after using it to fill `budget_wiki` missing values
-    [4] `duration` - after using it to fill `runtime` missing values
+    1. `release_data_wiki` - after dropping the outlier
+    2. `revenue` - after using it to fill `box_office` missing values
+    3. `budget_kaggle` - after using it to fill `budget_wiki` missing values
+    4. `duration` - after using it to fill `runtime` missing values
 
     Parameters
     ----------
@@ -137,6 +137,23 @@ def clean_cols(movies_df, col_order=col_order, col_names=col_names):
 
 
 def join_movie_data(wiki_df, kaggle_df):
+
+    """
+    Join the Wikipedia movie data and Kaggle movie data. Clean the columns by 
+    dropping redundant columns and renaming remaining columns for consistency.
+
+    Parameters
+    ----------
+    wiki_df : Pandas dataframe
+        Wikipedia movie data
+    kaggle_df : Pandas dataframe
+        Kaggle movie data
+
+    Returns
+    -------
+    Pandas dataframe
+        Joined movie data
+    """
 
     # Join Wikipedia and Kaggle data
     movies_df = pd.merge(wiki_df, kaggle_df, how='inner', 

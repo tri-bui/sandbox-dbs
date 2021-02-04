@@ -374,7 +374,25 @@ def recast_wiki_columns(wiki_data):
 
 
 def clean_wiki_movies(wiki_movies):
-    
+
+    """
+    Clean the Wikipedia movie JSON data with the following steps:
+    1. Filter out TV shows
+    2. Rename keys for consistence and drop unnecessary keys
+    3. Convert JSON data to a dataframe
+    4. Drop duplicate rows
+    5. Recast columns to appropriate data types
+
+    Parameters
+    ----------
+    wiki_movies : list[dict]
+        Wikipedia movie data in JSON format
+
+    Returns
+    -------
+    Pandas dataframe
+        Clean Wikipedia movie data
+    """
 
     # Filter for movies
     movies = filter_for_movies(wiki_movies)

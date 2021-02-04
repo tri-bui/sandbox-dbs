@@ -60,11 +60,27 @@ def recast_cols(movies_df):
 
 def clean_kaggle_movies(movies_df):
 
+    """
+    Clean the Kaggle movie data with the following steps:
+    1. Drop duplicate rows
+    2. Filter out adult videos and drop unnecessary columns
+    3. Recast columns to appropriate data types
+
+    Parameters
+    ----------
+    movies_df : Pandas dataframe
+        Kaggle movie data
+
+    Returns
+    -------
+    Pandas dataframe
+        Clean Kaggle movie data
+    """
 
     # Drop duplicate rows
     movies_df = udf_movies.drop_duplicates(movies_df)
 
-    # Filter out adult videos and drop unused columns
+    # Filter out adult videos and drop unnecessary columns
     movies_df = drop_cols(movies_df)
 
     # Recast columns to appropriate data types
