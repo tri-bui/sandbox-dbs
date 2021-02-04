@@ -29,7 +29,7 @@ def add_rating_count(movies_df, ratings_df):
     pivot.columns = ['movie_id'] + ['rating_' + str(rating) for rating in pivot.columns[1:]]
     
     # Merge aggregate rating data into movie data
-    df = pd.merge(movies_df, ratings_count_df, on='movie_id', how='left')
+    df = pd.merge(movies_df, pivot, on='movie_id', how='left')
 
     # Fill missing rating counts with 0
     for col in df.columns[-10:]:

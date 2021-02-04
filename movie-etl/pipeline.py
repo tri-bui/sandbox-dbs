@@ -138,7 +138,10 @@ def etl_pipeline():
                                             data_path + reduced_ratings_file)
     print(ratings_df.info(null_counts=True))
 
-    return movies_df
+    df = add_ratings.add_rating_count(movies_df, ratings_df)
+    print(df.info())
+
+    return df
 
 
 if __name__ == '__main__':

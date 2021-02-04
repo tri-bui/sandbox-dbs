@@ -45,7 +45,7 @@ col_order = [
 
 # New column names for joined movie data
 col_names = [
-    'id', 'imdb_id', 'imdb_link', 'url', 'poster_path', 'title', 'overview', 
+    'movie_id', 'imdb_id', 'imdb_link', 'url', 'poster_path', 'title', 'overview', 
     'release_date', 'year', 'runtime', 'budget', 'revenue', 
     'genres', 'country', 'language', 'spoken_languages', 
     'status', 'popularity', 'vote_average', 'vote_count', 
