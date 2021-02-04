@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import clean_movie_data as clean_movies
+import utils.clean_movie_data as clean_movies
 
 
 def drop_cols(movies_df):

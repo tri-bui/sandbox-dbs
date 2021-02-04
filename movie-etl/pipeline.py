@@ -2,11 +2,14 @@ import json
 import numpy as np
 import pandas as pd
 
-import clean_wikipedia_data as clean_wiki
-import clean_kaggle_data as clean_kaggle
-import clean_movie_data as clean_movies
-import add_ratings_data as add_ratings
-import config
+# from utils import udf_wiki, udf_kaggle, udf_movies, udf_ratings
+# from config import config
+
+from utils import clean_wikipedia_data as clean_wiki, \
+                  clean_kaggle_data as clean_kaggle, \
+                  clean_movie_data as clean_movies, \
+                  add_ratings_data as add_ratings, \
+                  config
 
 
 def extract(file_path, file_type='csv'):
@@ -71,7 +74,7 @@ def transform(wiki_movies, kaggle_movies):
                                             config.data_path + config.reduced_ratings_file)
 
     # Add aggregate rating counts to the movie data
-    df = add_ratings.add_rating_count(movies_df, ratings_df)
+    df = add_ratings.join_data(movies_df, ratings_df)
 
     return df
 
@@ -91,13 +94,12 @@ def etl_pipeline():
 
     # Transform data
     df = transform(wiki_data, kaggle_df)
+    print(df.info())
 
     # Extract reduced rating data
     rating_df = extract(config.data_path + config.reduced_ratings_file)
-    
     return df
 
 
 if __name__ == '__main__':
     etl_pipeline()
-

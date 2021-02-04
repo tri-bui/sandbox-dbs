@@ -131,6 +131,9 @@ dmypy.json
 # Mac
 .DS_Store
 
+# Editor
+.vscode
+
 # Config
 config.py
 

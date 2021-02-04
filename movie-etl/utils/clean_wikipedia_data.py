@@ -1,8 +1,8 @@
 import re
 import numpy as np
 import pandas as pd
-import clean_movie_data as clean_movies
-from config_vars import keys_to_rename
+import utils.clean_movie_data as clean_movies
+from utils.config_vars import keys_to_rename
 
 
 """ ### CLEANING ### """
