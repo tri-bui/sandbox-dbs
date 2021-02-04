@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import utils.clean_movie_data as clean_movies
+from utils import udf_movies
 
 
 def drop_cols(movies_df):
@@ -62,7 +62,7 @@ def clean_kaggle_movies(movies_df):
 
 
     # Drop duplicate rows
-    movies_df = clean_movies.drop_duplicates(movies_df)
+    movies_df = udf_movies.drop_duplicates(movies_df)
 
     # Filter out adult videos and drop unused columns
     movies_df = drop_cols(movies_df)

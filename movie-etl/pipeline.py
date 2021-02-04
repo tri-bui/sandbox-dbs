@@ -2,13 +2,7 @@ import json
 import numpy as np
 import pandas as pd
 
-# from utils import udf_wiki, udf_kaggle, udf_movies, udf_ratings
-# from config import sys_vars
-
-from utils import clean_wikipedia_data as clean_wiki, \
-                  clean_kaggle_data as clean_kaggle, \
-                  clean_movie_data as clean_movies, \
-                  add_ratings_data as add_ratings
+from utils import udf_wiki, udf_kaggle, udf_movies, udf_ratings
 from config import sys_vars
 
 
@@ -64,17 +58,17 @@ def transform(wiki_movies, kaggle_movies):
 
 
     # Clean movie data
-    wiki_df = clean_wiki.clean_wiki_movies(wiki_movies) # clean Wikipedia data
-    kaggle_df = clean_kaggle.clean_kaggle_movies(kaggle_movies) # clean kaggle data
-    movies_df = clean_movies.join_movie_data(wiki_df, kaggle_df) # join movie data
+    wiki_df = udf_wiki.clean_wiki_movies(wiki_movies) # clean Wikipedia data
+    kaggle_df = udf_kaggle.clean_kaggle_movies(kaggle_movies) # clean kaggle data
+    movies_df = udf_movies.join_movie_data(wiki_df, kaggle_df) # join movie data
 
     # Extract and reduce rating data
     ratings_df = extract(sys_vars.data_path + sys_vars.ratings_file)
-    ratings_df = add_ratings.reduce_ratings(ratings_df, movies_df['movie_id'].values, 
+    ratings_df = udf_ratings.reduce_ratings(ratings_df, movies_df['movie_id'].values, 
                                             sys_vars.data_path + sys_vars.reduced_ratings_file)
 
     # Add aggregate rating counts to the movie data
-    df = add_ratings.join_data(movies_df, ratings_df)
+    df = udf_ratings.join_data(movies_df, ratings_df)
 
     return df
 

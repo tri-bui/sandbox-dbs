@@ -1,7 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
-import utils.clean_movie_data as clean_movies
+from utils import udf_movies
 from config.data_vars import keys_to_rename
 
 
@@ -384,7 +384,7 @@ def clean_wiki_movies(wiki_movies):
     movies_df = pd.DataFrame(movies)
 
     # Drop duplicate rows
-    movies_df = clean_movies.drop_duplicates(movies_df)
+    movies_df = udf_movies.drop_duplicates(movies_df)
 
     # Recast columns to appropriate data types
     movies_df = recast_wiki_columns(movies_df)
