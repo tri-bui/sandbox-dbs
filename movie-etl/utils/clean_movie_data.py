@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from utils.config_vars import col_order, col_names
+from config.data_vars import col_order, col_names
 
 
 def drop_duplicates(movies_df):

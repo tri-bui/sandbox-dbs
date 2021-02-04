@@ -3,13 +3,13 @@ import numpy as np
 import pandas as pd
 
 # from utils import udf_wiki, udf_kaggle, udf_movies, udf_ratings
-# from config import config
+# from config import sys_vars
 
 from utils import clean_wikipedia_data as clean_wiki, \
                   clean_kaggle_data as clean_kaggle, \
                   clean_movie_data as clean_movies, \
-                  add_ratings_data as add_ratings, \
-                  config
+                  add_ratings_data as add_ratings
+from config import sys_vars
 
 
 def extract(file_path, file_type='csv'):
@@ -69,9 +69,9 @@ def transform(wiki_movies, kaggle_movies):
     movies_df = clean_movies.join_movie_data(wiki_df, kaggle_df) # join movie data
 
     # Extract and reduce rating data
-    ratings_df = extract(config.data_path + config.ratings_file)
+    ratings_df = extract(sys_vars.data_path + sys_vars.ratings_file)
     ratings_df = add_ratings.reduce_ratings(ratings_df, movies_df['movie_id'].values, 
-                                            config.data_path + config.reduced_ratings_file)
+                                            sys_vars.data_path + sys_vars.reduced_ratings_file)
 
     # Add aggregate rating counts to the movie data
     df = add_ratings.join_data(movies_df, ratings_df)
@@ -89,17 +89,20 @@ def load():
 def etl_pipeline():
 
     # Extract movie data
-    wiki_data = extract(config.data_path + config.wiki_file, 'json') # Wikipedia data
-    kaggle_df = extract(config.data_path + config.kaggle_file) # Kaggle data
+    wiki_data = extract(sys_vars.data_path + sys_vars.wiki_file, 'json') # Wikipedia data
+    kaggle_df = extract(sys_vars.data_path + sys_vars.kaggle_file) # Kaggle data
 
     # Transform data
     df = transform(wiki_data, kaggle_df)
     print(df.info())
 
     # Extract reduced rating data
-    rating_df = extract(config.data_path + config.reduced_ratings_file)
+    rating_df = extract(sys_vars.data_path + sys_vars.reduced_ratings_file)
+    
     return df
 
 
 if __name__ == '__main__':
+    import os
+    print(os.getcwd())
     etl_pipeline()
