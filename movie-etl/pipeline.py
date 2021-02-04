@@ -58,6 +58,7 @@ def extract(file_path, file_type='csv'):
 
 
 def clean_wiki_movies(wiki_movies):
+    
 
     # Filter for movies
     movies = clean_wiki.filter_for_movies(wiki_movies)
@@ -75,6 +76,7 @@ def clean_wiki_movies(wiki_movies):
 
 
 def clean_kaggle_movies(movies_df):
+
 
     # Drop duplicate rows
     movies_df = clean_movies.drop_duplicates(movies_df)
