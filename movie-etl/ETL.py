@@ -108,10 +108,9 @@ def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars
     Load data into a PostgreSQL database. This function requires some setup 
     before running:
     1. Create a PostgreSQL database
-    2. Create a `sys_vars.py` script in the `config` directory
-    3. In the `config.sys_vars` module, create a `psql` dictionary to hold 
-       database properties for the connection string using the following  
-       key names:
+    2. In the `sys_vars.py` script of the `config` directory, create a `psql` 
+       dictionary to hold database properties for the connection string using 
+       the following key names:
        a. `user` - database user, by default 'postgres'
        b. `password` - database password
        c. `location` - host address, by default '127.0.0.1'
