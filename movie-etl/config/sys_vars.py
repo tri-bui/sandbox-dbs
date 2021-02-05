@@ -5,5 +5,12 @@ kaggle_file = 'raw/movies_metadata.csv'
 ratings_file = 'raw/ratings.csv'
 reduced_ratings_file = 'ratings_min.csv'
 
-# PostgreSQL password
-PSQL_PW = '12qwaszx'
+# PostgreSQL connection string properties
+psql = {
+    'user': 'postgres', 
+    'password': '12qwaszx', 
+    'location': '127.0.0.1', 
+    'port': '5432',
+    'database': 'movies'
+}
+

@@ -1,6 +1,8 @@
+import datetime as dt
 import json
 import numpy as np
 import pandas as pd
+from sqlalchemy import create_engine
 
 from utils import udf_wiki, udf_kaggle, udf_movies, udf_ratings
 from config import sys_vars
@@ -96,18 +98,59 @@ def transform(wiki_movies, kaggle_movies,
     ratings_df = udf_ratings.reduce_ratings(ratings_df, 
                                             movies_df['movie_id'].values, 
                                             data_path + reduced_ratings_file)
+    n_ratings = ratings_df.shape[0] # number of rows
 
     # Add aggregate rating counts to the movie data
     df = udf_ratings.join_data(movies_df, ratings_df)
 
-    return df
+    return df, n_ratings
 
 
-def load():
+def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars.psql):
 
+    """
     
 
-    pass
+    Parameters
+    ----------
+    data : Pandas dataframe or str
+        Movie data or path to CSV file containing rating data
+    table : str, optional
+        Name of table in database to load into, by default 'movies'
+    n_ratings : int, optional
+        Number of rows in the rating data, by default 0
+    n_chunks : int, optional
+        Number of chunks to read and load if loading the rating data, 
+        by default 10
+    uri_properties : dict, optional
+        Connection string properties consisting of the database user, 
+        password, location, port, and name; by default `psql` from the 
+        `config.sys_vars` module
+    """
+    
+    # Connection string
+    user = uri_properties['user']
+    password = uri_properties['password']
+    location = uri_properties['location']
+    port = uri_properties['port']
+    database = uri_properties['database']
+    uri = f'postgres://{user}:{password}@{location}:{port}/{database}'
+
+    # Create database engine
+    engine = create_engine(uri)
+
+    # Load data into database
+    if n_ratings: # load rating data in chunks
+        loaded, start = 0, dt.datetime.now() # start tracking progress
+        chunksize = round(n_ratings, -len(str(n_ratings)) + 1) // n_chunks # chunk size
+        for chunk in pd.read_csv(data, chunksize=chunksize): # read in chunks
+            unloaded = min(loaded + chunksize, n_ratings) # upper limit of loading range
+            print('Loading rows', loaded, 'to', unloaded, end=' | ') # print progress
+            chunk.to_sql(table, engine, if_exists='append') # load chunk
+            loaded += chunksize # update lower limit of loading range
+            print((dt.datetime.now() - start), 'elapsed') # print elapsed time
+    else: # load movie data
+        data.to_sql(table, engine, if_exists='replace')
 
 
 def etl_pipeline():
@@ -117,14 +160,15 @@ def etl_pipeline():
     kaggle_df = extract(sys_vars.data_path + sys_vars.kaggle_file) # Kaggle data
 
     # Transform data
-    df = transform(wiki_data, kaggle_df)
+    df, n_ratings = transform(wiki_data, kaggle_df)
     print(df.info())
 
     # Extract reduced rating data
-    rating_df = extract(sys_vars.data_path + sys_vars.reduced_ratings_file)
-    
-    return df
+    load(df) # load movie data into database
+    load(sys_vars.data_path + sys_vars.reduced_ratings_file, 
+         table='ratings', n_ratings=n_ratings) # load rating data into database
 
+    return df
 
 if __name__ == '__main__':
     import os
