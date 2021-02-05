@@ -57,9 +57,8 @@ def extract(file_path, file_type='csv'):
 
 
 def transform(wiki_movies, kaggle_movies, 
-              data_path=sys_vars.data_path,
-              ratings_file=sys_vars.ratings_file, 
-              reduced_ratings_file=sys_vars.reduced_ratings_file):
+              ratings_path=sys_vars.ratings_path, 
+              reduced_ratings_path=sys_vars.reduced_ratings_path):
 
     """
     Clean the movie and rating data, then join them all. Additionally, reduce 
@@ -72,15 +71,12 @@ def transform(wiki_movies, kaggle_movies,
         Wikipedia movie data in JSON format
     kaggle_movies : Pandas dataframe
         Kaggle movie data
-    data_path : str
-        Path to the data directory, by default `data_path` from the 
+    ratings_path : str
+        Name of the rating data file, by default `ratings_path` from the 
         `config.sys_vars` module
-    ratings_file : str
-        Name of the rating data file, by default `ratings_file` from the 
-        `config.sys_vars` module
-    reduced_ratings_file : str
+    reduced_ratings_path : str
         Name of the CSV file to save the reduced rating data to, by default 
-        `reduced_ratings_file` from the `config.sys_vars` module
+        `reduced_ratings_path` from the `config.sys_vars` module
 
     Returns
     -------
@@ -94,10 +90,10 @@ def transform(wiki_movies, kaggle_movies,
     movies_df = udf_movies.join_movie_data(wiki_df, kaggle_df) # join movie data
 
     # Extract and reduce rating data
-    ratings_df = extract(data_path + ratings_file)
+    ratings_df = extract(ratings_path)
     ratings_df = udf_ratings.reduce_ratings(ratings_df, 
                                             movies_df['movie_id'].values, 
-                                            data_path + reduced_ratings_file)
+                                            reduced_ratings_path)
     n_ratings = ratings_df.shape[0] # number of rows
 
     # Add aggregate rating counts to the movie data
@@ -168,8 +164,8 @@ def etl_pipeline():
 
     # Extract movie data
     print('Extracting data...')
-    wiki_data = extract(sys_vars.data_path + sys_vars.wiki_file, 'json') # Wikipedia data
-    kaggle_df = extract(sys_vars.data_path + sys_vars.kaggle_file) # Kaggle data
+    wiki_data = extract(sys_vars.wiki_path, 'json') # Wikipedia data
+    kaggle_df = extract(sys_vars.kaggle_path) # Kaggle data
     print('Completed extracting.')
 
     # Transform data
@@ -181,7 +177,7 @@ def etl_pipeline():
     # Load data into database
     print('Loading data into database...')
     load(df) # load movie data
-    load(sys_vars.data_path + sys_vars.reduced_ratings_file, 
+    load(sys_vars.reduced_ratings_path, 
          table='ratings', n_ratings=n_ratings) # load rating data
     print('Completed loading.')
 
