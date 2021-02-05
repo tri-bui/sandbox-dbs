@@ -159,12 +159,43 @@ def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars
         data.to_sql(table, engine, if_exists='replace')
 
 
-def etl_pipeline():
+def etl_pipeline(wiki_path=sys_vars.wiki_path, 
+                 kaggle_path=sys_vars.kaggle_path, 
+                 ratings_path=sys_vars.reduced_ratings_path):
+
+    """
+    Extract-transform-load pipeline:
+    1. Extract      -   read in the raw Wikipedia and Kaggle movie data
+    2. Transform    -   clean the raw data from both sources and join them into 
+                        a single dataframe, then read in and aggregate the 
+                        Kaggle rating data and join it into the movie data; 
+                        additionally, reduce the rating data to only the movies 
+                        in the movie data
+    3. Load         -   load the joined movie data and the reduced rating data 
+                        into a PostgreSQL database
+
+    Parameters
+    ----------
+    wiki_path : str, optional
+        Path to the raw Wikipedia movie data, by default `wiki_path` from the 
+        `config.sys_vars` module
+    kaggle_path : str, optional
+        Path to the raw Kaggle movie data, by default `kaggle_path` from the 
+        `config.sys_vars` module
+    ratings_path : str, optional
+        Path to the reduced Kaggle ratings data, by default 
+        `reduced_ratings_path` from the `config.sys_vars` module
+
+    Returns
+    -------
+    Pandas dataframe
+        Joined movie data with aggregate rating data
+    """
 
     # Extract movie data
     print('Extracting data...')
-    wiki_data = extract(sys_vars.wiki_path, 'json') # Wikipedia data
-    kaggle_df = extract(sys_vars.kaggle_path) # Kaggle data
+    wiki_data = extract(wiki_path, 'json') # Wikipedia data
+    kaggle_df = extract(kaggle_path) # Kaggle data
     print('Completed extracting.')
 
     # Transform data
@@ -176,13 +207,11 @@ def etl_pipeline():
     # Load data into database
     print('Loading data into database...')
     load(df) # load movie data
-    load(sys_vars.reduced_ratings_path, 
-         table='ratings', n_ratings=n_ratings) # load rating data
+    load(ratings_path, table='ratings', n_ratings=n_ratings) # load rating data
     print('Completed loading.')
 
     return df
 
+
 if __name__ == '__main__':
-    import os
-    print(os.getcwd())
     etl_pipeline()
