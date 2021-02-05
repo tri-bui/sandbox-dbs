@@ -109,7 +109,18 @@ def transform(wiki_movies, kaggle_movies,
 def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars.psql):
 
     """
-    
+    Load data into a PostgreSQL database. This function requires some setup 
+    before running:
+    1. Create a PostgreSQL database
+    2. Create a `sys_vars.py` script in the `config` directory
+    3. In the `config.sys_vars` module, create a `psql` dictionary to hold 
+       database properties for the connection string using the following  
+       key names:
+       a. `user` - database user, by default 'postgres'
+       b. `password` - database password
+       c. `location` - host address, by default '127.0.0.1'
+       d. `port` - port used, by default '5432'
+       e. `database` - name of database as created in step 1
 
     Parameters
     ----------
@@ -156,17 +167,23 @@ def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars
 def etl_pipeline():
 
     # Extract movie data
+    print('Extracting data...')
     wiki_data = extract(sys_vars.data_path + sys_vars.wiki_file, 'json') # Wikipedia data
     kaggle_df = extract(sys_vars.data_path + sys_vars.kaggle_file) # Kaggle data
+    print('Completed extracting.')
 
     # Transform data
+    print('Transforming data...')
     df, n_ratings = transform(wiki_data, kaggle_df)
     print(df.info())
+    print('Completed transforming.')
 
-    # Extract reduced rating data
-    load(df) # load movie data into database
+    # Load data into database
+    print('Loading data into database...')
+    load(df) # load movie data
     load(sys_vars.data_path + sys_vars.reduced_ratings_file, 
-         table='ratings', n_ratings=n_ratings) # load rating data into database
+         table='ratings', n_ratings=n_ratings) # load rating data
+    print('Completed loading.')
 
     return df
 
