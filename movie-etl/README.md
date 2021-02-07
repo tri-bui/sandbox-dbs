@@ -1,6 +1,6 @@
 # Movie Data ETL Pipeline
 
-This is an extract-transform-load (ETL) pipeline for movie data from Wikipedia and the Open Movie Database (OMDB). The Wikipedia data was scraped from the site and the OMDB data was downloaded from Kaggle. As the name suggests, this movie data was extracted from flat files, cleaned and transformed, and loaded into a PostgreSQL database.
+This is an extract-transform-load (ETL) pipeline for movie data from Wikipedia and the Open Movie Database (OMDB). The Wikipedia data was scraped from the site and the OMDB data was downloaded from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset). As the name suggests, this movie data was extracted from flat files, cleaned and transformed, and loaded into a PostgreSQL database.
 
 ## Data
 
@@ -31,4 +31,4 @@ In this project, data files 1 - 3 were the raw data and files 4 - 6 were generat
     - `port` - port used, by default '5432'
     - `database` - name of database as created in step 1
 
-Sample connection string: 'postgres://postgres:password@127.0.0.1:5432/movie_database'
+Sample connection string: `postgres://postgres:password@127.0.0.1:5432/movie_database`
