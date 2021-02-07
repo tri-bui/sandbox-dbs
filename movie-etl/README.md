@@ -2,17 +2,6 @@
 
 This is an extract-transform-load (ETL) pipeline for movie data from Wikipedia and the Open Movie Database (OMDB). The Wikipedia data was scraped from the site and the OMDB data was downloaded from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset). As the name suggests, this movie data was extracted from flat files, cleaned and transformed, and loaded into a PostgreSQL database.
 
-## Data
-
-1. `data/raw/wikipedia.movies.json` - Wikipedia movie data scraped from the site
-2. `data/raw/movies_metadata.csv` - OMDB movie data downloaded from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset)
-3. `data/raw/ratings.csv` - OMDB movie ratings data download from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset)
-4. `data/wiki_movies.pkl` - cleaned Wikipedia movie data created by `notebooks/1-extract.ipynb`
-5. `data/kaggle_movies.pkl` - cleaned Kaggle movie data created by `notebooks/1-extract.ipynb`
-6. `data/movies.pkl` - joined movie data created by `notebooks/2-transform.ipynb`
-
-In this project, data files 1 - 3 were the raw data and files 4 - 6 were generated in the notebooks following some data transformations.
-
 ## Getting started
 
 1. Create a PostgreSQL database using pgAdmin or any other PostgreSQL database management tool
@@ -30,5 +19,17 @@ In this project, data files 1 - 3 were the raw data and files 4 - 6 were generat
     - `location` - host address, by default '127.0.0.1'
     - `port` - port used, by default '5432'
     - `database` - name of database as created in step 1
+7. Run `etl.py` in the command line to run the pipeline - extract the raw data, clean and transform it, and load it into the database created in step 1
 
 Sample connection string: `postgres://postgres:password@127.0.0.1:5432/movie_database`
+
+## Data
+
+1. `data/raw/wikipedia.movies.json` - Wikipedia movie data scraped from the site
+2. `data/raw/movies_metadata.csv` - OMDB movie data downloaded from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset)
+3. `data/raw/ratings.csv` - OMDB movie ratings data download from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset)
+4. `data/wiki_movies.pkl` - cleaned Wikipedia movie data created by `notebooks/1-extract.ipynb`
+5. `data/kaggle_movies.pkl` - cleaned Kaggle movie data created by `notebooks/1-extract.ipynb`
+6. `data/movies.pkl` - joined movie data created by `notebooks/2-transform.ipynb`
+
+In this project, data files 1 - 3 were the raw data and files 4 - 6 were generated in the notebooks following some data transformations.
