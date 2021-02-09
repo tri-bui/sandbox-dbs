@@ -2,7 +2,6 @@ import datetime as dt
 import numpy as np
 import pandas as pd
 
-import sqlalchemy as sa
 from sqlalchemy import create_engine, func as F
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
