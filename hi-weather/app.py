@@ -11,7 +11,7 @@ import utils
 
 
 # SQL engine and session
-engine = create_engine('sqlite:///hawaii.sqlite')
+engine = create_engine('sqlite:///hi-weather/hawaii.sqlite')
 session = Session(engine)
 
 # Reflect db tables
@@ -35,9 +35,9 @@ def home():
         <h1>Welcome to the Hawaii Weather Analysis API!</h1><br />
 
         <h2>Available routes:</h2>
-        <h3><a href="/api/v1.0/precipitation">Precipitation</a></h3>
-        <h3><a href="/api/v1.0/stations">Weather Stations</a></h3>
-        <h3><a href="/api/v1.0/tobs">Temperature Observations</a></h3>
+        <h3><a href="/api/v1.0/precipitation">Precipitation (last 12 months)</a></h3>
+        <h3><a href="/api/v1.0/stations">Weather Stations' Measurement Counts</a></h3>
+        <h3><a href="/api/v1.0/tobs">Most Active Station's Temperature Observations (last 12 months)</a></h3>
         <h3><a href="/api/v1.0/temp/start/end">Temperature Statistics</a></h3>
     """
 
@@ -58,6 +58,7 @@ def precipitation():
 
     # Rollback session transaction
     session.rollback()
+    
     return prcp_json
 
 
@@ -74,6 +75,7 @@ def stations():
 
     # Rollback session transaction
     session.rollback()
+
     return stations_json
 
 
@@ -97,6 +99,7 @@ def tobs():
 
     # Rollback session transaction
     session.rollback()
+
     return temps_json
 
 
@@ -104,24 +107,30 @@ def tobs():
 @app.route('/api/v1.0/temp/<start>/<end>')
 def temp_stats(start='start', end='end'):
 
-    ''' Minimum, average, and maximum temperature over the date range from the start date to the end date '''
+    """ Minimum, average, and maximum temperature over the date range from the 
+    start date to the end date """
 
     # Date range to calculate statistics for
-    start, end = get_date_range(start, end)
+    start, end = utils.get_date_range(session=session, table=M, 
+                                      start_date=start, end_date=end)
 
     # Query the data to calculate the 3 statistics over the date range
     SELECT = [F.min(M.tobs), F.avg(M.tobs), F.max(M.tobs)]
     stats = session.query(*SELECT).filter((M.date >= start) & (M.date <= end))
-    stats = stats.all()[0]
+    stats = stats.first()
 
     # Convert query results to JSON
     stats_json = jsonify(dict(
-        _1_start_date=start, _2_end_date=end, 
-        _3_min_temp=stats[0], _4_avg_temp=stats[1], _5_max_temp=stats[2]
+        _1_start_date=start, 
+        _2_end_date=end, 
+        _3_min_temp=stats[0], 
+        _4_avg_temp=stats[1], 
+        _5_max_temp=stats[2]
     ))
 
     # Rollback session transaction
     session.rollback()
+
     return stats_json
 
 
