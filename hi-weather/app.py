@@ -1,12 +1,13 @@
 import datetime as dt
 import numpy as np
 import pandas as pd
+from flask import Flask, jsonify
 
 from sqlalchemy import create_engine, func as F
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
 
-from flask import Flask, jsonify
+import utils
 
 
 # SQL engine and session
@@ -22,38 +23,38 @@ M, S = Base.classes
 app = Flask(__name__)
 
 
-""" App routes """
+""" App Routes """
 
 
 @app.route('/')
-def welcome():
+def home():
 
-    ''' Home page with links to routes '''
+    """ Home page with links to routes """
 
-    return '''
-        <h1>Welcome to the Hawaii Climate Analysis API!</h1><br />
+    return """
+        <h1>Welcome to the Hawaii Weather Analysis API!</h1><br />
 
         <h2>Available routes:</h2>
         <h3><a href="/api/v1.0/precipitation">Precipitation</a></h3>
-        <h3><a href="/api/v1.0/stations">Stations</a></h3>
+        <h3><a href="/api/v1.0/stations">Weather Stations</a></h3>
         <h3><a href="/api/v1.0/tobs">Temperature Observations</a></h3>
         <h3><a href="/api/v1.0/temp/start/end">Temperature Statistics</a></h3>
-    '''
+    """
 
 
 @app.route('/api/v1.0/precipitation')
 def precipitation():
 
-    ''' Precipitation data from the last 12 months '''
+    """ Precipitation data from the last 12 months """
 
     # Date range for the last 12 months in the data
-    start, _ = get_date_range(n_days=365)
+    start, _ = utils.get_date_range(session=session, table=M, n_days=365)
 
     # Query the precipitation data from the last 12 months
-    prcps = session.query(M.date, M.prcp).filter(M.date >= start).all()
+    prcp = session.query(M.date, M.prcp).filter(M.date >= start).all()
 
     # Convert query results to JSON
-    prcp_json = jsonify({date: prcp for date, prcp in prcps})
+    prcp_json = jsonify({date: prcp for date, prcp in prcp})
 
     # Rollback session transaction
     session.rollback()
@@ -63,40 +64,40 @@ def precipitation():
 @app.route('/api/v1.0/stations')
 def stations():
 
-    ''' Measurement count from each station '''
+    """ Measurement count from each station """
 
     # Query the data to count number of measurements from each station
-    Mcounts = count_measurements_by_station()
+    stations = utils.count_by_station(session=session, table=M)
 
     # Convert query results to JSON
-    station_json = jsonify({station: count for station, count in Mcounts})
+    stations_json = jsonify({station: count for station, count in stations})
 
     # Rollback session transaction
     session.rollback()
-    return station_json
+    return stations_json
 
 
 @app.route('/api/v1.0/tobs')
 def tobs():
     
-    ''' Most active station's temperature observations from the last 12 months '''
+    """ Most active station's temperature observations from the last 12 months """
 
     # Date range for the last 12 months in the data
-    start, _ = get_date_range(n_days=365)
+    start, _ = utils.get_date_range(session=session, table=M, n_days=365)
 
     # Get the most active station (most measurements)
-    most_active = count_measurements_by_station()[0][0]
+    most_active = utils.count_by_station(session=session, table=M)[0][0]
 
-    # Query the tobs data for this stations from the last 12 months
+    # Query the `tobs` data for this stations from the last 12 months
     temps = session.query(M.date, M.tobs)
     temps = temps.filter((M.station == most_active) & (M.date >= start)).all()
 
     # Convert query results to JSON
-    temp_json = jsonify({date: temp for date, temp in temps})
+    temps_json = jsonify({date: temp for date, temp in temps})
 
     # Rollback session transaction
     session.rollback()
-    return temp_json
+    return temps_json
 
 
 @app.route('/api/v1.0/temp/<start>')
