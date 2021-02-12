@@ -40,3 +40,13 @@ In this project, data files 1 - 3 were the raw data and files 4 - 6 were generat
 2. `notebooks/2-transform.ipynb` - Continue the transform step by merging the Wikipedia data and the Kaggle data and performing some additional cleaning and transformation on the combined data.
 3. `notebooks/3-load.ipynb` - Loads the data into a PostgreSQL database after incorporating some of the ratings data into the combined movie data.
 4. `notebooks/config.py` - Hold a variable named `PSQL_PW` to store the PostgreSQL database password.
+
+## Scripts
+
+1. `etl.py` - main script to run the ETL pipeline
+2. `utils/udf_wiki.py` - functions for cleaning the Wikipedia movie data
+3. `utils/udf_kaggle.py` - functions for cleaning the OMDB movie data (from Kaggle)
+4. `utils/udf_movies.py` - functions for joining and cleaning the movie data from both sources
+5. `utils/udf_ratings.py` - functions for transforming the OMDB rating data (from Kaggle) and joining it into the combined movie data
+6. `config/data_vars` - variables holding key and column names used in the cleaning/transformation process
+7. `config/sys_vars` - variables holding paths to data files and database properties for the connection string
