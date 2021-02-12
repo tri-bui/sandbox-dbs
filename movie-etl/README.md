@@ -33,3 +33,10 @@ Sample connection string: `postgres://postgres:password@127.0.0.1:5432/movie_dat
 6. `data/movies.pkl` - joined movie data created by `notebooks/2-transform.ipynb`
 
 In this project, data files 1 - 3 were the raw data and files 4 - 6 were generated in the notebooks following some data transformations.
+
+## Notebooks
+
+1. `notebooks/1-extract.ipynb` - Begins the ETL process by extracting the data from the 2 data sources (2 CSV files from Kaggle and 1 JSON file with data scraped from Wikipedia) and starts the transform step by cleaning the data.
+2. `notebooks/2-transform.ipynb` - Continue the transform step by merging the Wikipedia data and the Kaggle data and performing some additional cleaning and transformation on the combined data.
+3. `notebooks/3-load.ipynb` - Loads the data into a PostgreSQL database after incorporating some of the ratings data into the combined movie data.
+4. `notebooks/config.py` - Hold a variable named `PSQL_PW` to store the PostgreSQL database password.
