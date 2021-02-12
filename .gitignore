@@ -136,6 +136,7 @@ dmypy.json
 
 # Config
 config.py
+sys_vars.py
 
 # Data 
 ratings*.csv
