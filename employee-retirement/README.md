@@ -33,8 +33,6 @@ This ERD was created with [QuickDBD](https://www.quickdatabasediagrams.com/). Al
 
 These tables were created in the database with the code in `schema.sql`. As stated in the comment at the top, uncomment that code block to drop the tables before recreating them.
 
-## Files
-
 ## Tools
 - [QuickDBD](https://www.quickdatabasediagrams.com/) - a web application for creating ERDs
 - [PostgreSQL 12](https://www.postgresql.org/) - one of the most popular database systems
