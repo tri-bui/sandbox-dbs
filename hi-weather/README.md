@@ -2,7 +2,14 @@
 
 This is an analysis of Hawaii weather using data in a SQLite database. This project explores the object relational mapping (ORM) paradigm of accessing a database with SQLAlchemy. The final deliverable is a Flask app that summarizes some key insights of the analysis.
 
+## Data
+
+The data is stored in the following 2 tables in a SQLite database in `hawaii.sqlite`:
+1. `measurement` - precipitation (`prcp`) and temperature (`tobs`) measurements of 9 different weather stations in Hawaii from 2010 to 2017
+2. `station` - metadata of the 9 weather stations, including their names and locations
+
 ## App Routes
+
 - `/`
 - `/api/v1.0/precipitation`
 - `/api/v1.0/stations`
