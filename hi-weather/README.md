@@ -8,6 +8,12 @@ The data is stored in the following 2 tables in a SQLite database in `hawaii.sql
 1. `measurement` - precipitation (`prcp`) and temperature (`tobs`) measurements of 9 different weather stations in Hawaii from 2010 to 2017
 2. `station` - metadata of the 9 weather stations, including their names and locations
 
+## Files
+
+1. `analysis.ipynb` - notebook for data analysis and visualization
+2. `utils.py` - script containing utility functions for querying the database
+3. `app.py` - script containing the Flask app with the routes described below
+
 ## App Routes
 
 - `/`
