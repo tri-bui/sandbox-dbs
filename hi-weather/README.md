@@ -16,8 +16,8 @@ The data is stored in the following 2 tables in a SQLite database in `hawaii.sql
 
 ## App Routes
 
-- `/`
-- `/api/v1.0/precipitation`
-- `/api/v1.0/stations`
-- `/api/v1.0/tobs`
-- `/api/v1.0/temp/<start>/<end>`
+- `/` - home page with links to all the routes
+- `/api/v1.0/precipitation` - precipitation data from the last 12 months
+- `/api/v1.0/stations` - all weather stations and the number of measurements each station recorded
+- `/api/v1.0/tobs` - the most active station's temperature observations from the last 12 months
+- `/api/v1.0/temp/<start>/<end>` - the minimum, average, and maximum temperature over the date range from the start date to the end date
