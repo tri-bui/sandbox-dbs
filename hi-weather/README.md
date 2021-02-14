@@ -21,3 +21,7 @@ The data is stored in the following 2 tables in a SQLite database in `hawaii.sql
 - `/api/v1.0/stations` - all weather stations and the number of measurements each station recorded
 - `/api/v1.0/tobs` - the most active station's temperature observations from the last 12 months
 - `/api/v1.0/temp/<start>/<end>` - the minimum, average, and maximum temperature over the date range from the start date to the end date
+    - Clicking the link to the `temp` route, from the home page, displays the entire date range (i.e. the default start date will be the first date in the data and the default end date will be the last date in the data)
+    - Change `start` and/or `end` in the URL to change the default dates and visit that updated URL to display the temperature statistics over the new date range
+    - Use the date format `%Y-%m-%d` (e.g. `2010-12-31`)
+    - Sample URL: `/api/v1.0/temp/2010-12-31/2015-1-1`
