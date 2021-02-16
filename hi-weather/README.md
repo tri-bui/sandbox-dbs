@@ -25,3 +25,8 @@ The data is stored in the following 2 tables in a SQLite database in `hawaii.sql
     - Change `start` and/or `end` in the URL to change the default dates and visit that updated URL to display the temperature statistics over the new date range
     - Use the date format `%Y-%m-%d` (e.g. `2010-12-31`)
     - Sample URL: `/api/v1.0/temp/2010-12-31/2015-1-1`
+
+## Getting Started
+
+- Requirements: Python 3, Numpy, Pandas, Matplotlib, SQLAlchemy, Flask
+- Run `app.py` in the terminal and visit the provided URL to launch the app
