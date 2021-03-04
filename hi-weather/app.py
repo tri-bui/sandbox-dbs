@@ -49,8 +49,8 @@ def precipitation():
 
     start, _ = utils.get_date_range(session=session, table=M, n_days=365) # get start date
     prcp_12m = session.query(M.date, M.prcp).filter(M.date >= start).all() # query precipitation
-    prcp_json = jsonify(name='Precipitation in the last 12 months',
-                        precipitation={date: prcp for date, prcp in prcp_12m}) # convert to json
+    prcp_json = jsonify(_Route='Precipitation in the last 12 months',
+                        Precipitation={date: prcp for date, prcp in prcp_12m}) # convert to json
     session.rollback() # rollback session transaction before returning
     return prcp_json
 
@@ -60,15 +60,10 @@ def stations():
 
     """ Measurement count from each station """
 
-    # Query the data to count number of measurements from each station
-    stations = utils.count_by_station(session=session, table=M)
-
-    # Convert query results to JSON
-    stations_json = jsonify({station: count for station, count in stations})
-
-    # Rollback session transaction
-    session.rollback()
-
+    stations = utils.count_by_station(session=session, table=M) # query measurement counts
+    stations_json = jsonify(_Route='Weather stations and number of measurements recorded',
+                            Stations={station: count for station, count in stations}) # convert to json
+    session.rollback() # rollback session transaction before returning
     return stations_json
 
 
