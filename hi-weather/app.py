@@ -49,8 +49,8 @@ def precipitation():
 
     start, _ = utils.get_date_range(session=session, table=M, n_days=365) # get start date
     prcp_12m = session.query(M.date, M.prcp).filter(M.date >= start).all() # query precipitation
-    prcp_json = jsonify(_Route='Precipitation in the last 12 months',
-                        Precipitation={date: prcp for date, prcp in prcp_12m}) # convert to json
+    prcp_json = jsonify(Description='Precipitation in the last 12 months',
+                        _Data={date: prcp for date, prcp in prcp_12m}) # convert to json
     session.rollback() # rollback session transaction before returning
     return prcp_json
 
@@ -61,8 +61,8 @@ def stations():
     """ Measurement count from each station """
 
     stations = utils.count_by_station(session=session, table=M) # query measurement counts
-    stations_json = jsonify(_Route='Weather stations and number of measurements recorded',
-                            Stations={station: count for station, count in stations}) # convert to json
+    stations_json = jsonify(Description='Weather stations and number of measurements recorded',
+                            _Data={station: count for station, count in stations}) # convert to json
     session.rollback() # rollback session transaction before returning
     return stations_json
 
@@ -72,22 +72,16 @@ def tobs():
     
     """ Most active station's temperature observations from the last 12 months """
 
-    # Date range for the last 12 months in the data
-    start, _ = utils.get_date_range(session=session, table=M, n_days=365)
-
-    # Get the most active station (most measurements)
-    most_active = utils.count_by_station(session=session, table=M)[0][0]
+    start, _ = utils.get_date_range(session=session, table=M, n_days=365) # get start date
+    most_active = utils.count_by_station(session=session, table=M)[0][0] # most active station
 
     # Query the `tobs` data for this stations from the last 12 months
     temps = session.query(M.date, M.tobs)
     temps = temps.filter((M.station == most_active) & (M.date >= start)).all()
 
-    # Convert query results to JSON
-    temps_json = jsonify({date: temp for date, temp in temps})
-
-    # Rollback session transaction
-    session.rollback()
-
+    temps_json = jsonify(Description='Most active station\'s temperature in the last 12 months',
+                         _Data={date: temp for date, temp in temps}) # convert to json
+    session.rollback() # rollback session transaction before returning
     return temps_json
 
 
