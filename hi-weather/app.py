@@ -47,18 +47,11 @@ def precipitation():
 
     """ Precipitation data from the last 12 months """
 
-    # Date range for the last 12 months in the data
-    start, _ = utils.get_date_range(session=session, table=M, n_days=365)
-
-    # Query the precipitation data from the last 12 months
-    prcp = session.query(M.date, M.prcp).filter(M.date >= start).all()
-
-    # Convert query results to JSON
-    prcp_json = jsonify({date: prcp for date, prcp in prcp})
-
-    # Rollback session transaction
-    session.rollback()
-    
+    start, _ = utils.get_date_range(session=session, table=M, n_days=365) # get start date
+    prcp_12m = session.query(M.date, M.prcp).filter(M.date >= start).all() # query precipitation
+    prcp_json = jsonify(name='Precipitation in the last 12 months',
+                        precipitation={date: prcp for date, prcp in prcp_12m}) # convert to json
+    session.rollback() # rollback session transaction before returning
     return prcp_json
 
 
