@@ -55,11 +55,10 @@ def get_date_range(session, table, start_date='start', end_date='end', n_days=No
     end_date = dt.datetime.strptime(end_date, '%Y-%m-%d').date()
 
     # If `n_days` specified, get the other side of the limit
-    if n_days is not None:
-        if days_from_end is not None: # `days_from_end` to `end_date`
-            start_date = end_date - dt.timedelta(days=n_days)
-        elif days_from_start is not None: # `start_date` to `days_from_start`
-            end_date = start_date + dt.timedelta(days=n_days)
+    if days_from_end: # `days_from_end` to `end_date`
+        start_date = end_date - dt.timedelta(days=n_days)
+    elif days_from_start: # `start_date` to `days_from_start`
+        end_date = start_date + dt.timedelta(days=n_days)
 
     return start_date, end_date
 
