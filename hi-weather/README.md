@@ -28,5 +28,5 @@ The data is stored in the following 2 tables in a SQLite database in `hawaii.sql
 
 ## Getting Started
 
-- Requirements: Python 3, Numpy, Pandas, Matplotlib, SQLAlchemy, Flask
+- Requirements: Python 3, Numpy, Pandas, Matplotlib, SQLAlchemy, Flask, Jupyter notebook/lab
 - Run `app.py` in the terminal and visit the provided URL to launch the app

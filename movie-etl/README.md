@@ -50,3 +50,11 @@ In this project, data files 1 - 3 were the raw data and files 4 - 6 were generat
 5. `utils/udf_ratings.py` - functions for transforming the OMDB rating data (from Kaggle) and joining it into the combined movie data
 6. `config/data_vars` - variables holding key and column names used in the cleaning/transformation process
 7. `config/sys_vars` - variables holding paths to data files and database properties for the connection string
+
+## Requirements
+- Python 3
+- Python libraries: Numpy, Pandas, Matplotlib, SQLAlchemy
+- Jupyter notebook/lab
+- PostgreSQL
+- pgAdmin or any other PostgreSQL database management tool
+- [Kaggle](https://www.kaggle.com) account
