@@ -3,10 +3,10 @@
 	Only employees hired between 1985 and 1988 are eligible for the retirement package */
 	
 	
--- -- Drop retiring_emp table
--- DROP TABLE retiring_emp CASCADE;
-
 -- Filter for eligible retiring employees
+
+DROP TABLE IF EXISTS retiring_emp CASCADE;
+
 WITH curr_employees AS (
 	SELECT emp_no, MAX(to_date)
 	FROM dept_employees
@@ -14,26 +14,25 @@ WITH curr_employees AS (
 	HAVING DATE_PART('year', MAX(to_date)) = 9999
 )
 SELECT e.*
-INTO retiring_emp -- save query results into table
+INTO retiring_emp
 FROM curr_employees AS ce
 	JOIN employees AS e ON ce.emp_no = e.emp_no
 WHERE (DATE_PART('year', e.birth_date) BETWEEN 1952 AND 1955)
 	AND (DATE_PART('year', e.hire_date) BETWEEN 1985 AND 1988);
 	
--- Test query
 SELECT * FROM retiring_emp;
 
 
--- -- Drop retiring_full table
--- DROP TABLE retiring_full CASCADE;
-
 -- Get full info on retiring employees
+
+DROP TABLE IF EXISTS retiring_full CASCADE;
+
 SELECT 
 	re.emp_no, re.first_name, re.last_name, re.gender, re.birth_date, re.hire_date,
 	tt.title, tt.title_from, tt.title_to,
 	s.salary, s.salary_from, s.salary_to,
 	d.dept_no, d.dept_name, de.dept_from, de.dept_to
-INTO retiring_full -- save query results into table
+INTO retiring_full
 FROM retiring_emp AS re
 	JOIN (
 		SELECT emp_no, salary, from_date AS salary_from, to_date AS salary_to
@@ -55,42 +54,39 @@ FROM retiring_emp AS re
 	) AS de ON re.emp_no = de.emp_no
 	JOIN departments AS d ON de.dept_no = d.dept_no;
 
--- Test query
 SELECT * FROM retiring_full;
 		
 
--- -- Drop retiring_dept table
--- DROP TABLE retiring_dept CASCADE;
-
 -- Count retiring employees by department
+
+DROP TABLE IF EXISTS retiring_dept CASCADE;
+
 SELECT dept_no, dept_name, COUNT(*)
-INTO retiring_dept -- save query results into table
+INTO retiring_dept
 FROM retiring_full
 GROUP BY dept_no, dept_name
 ORDER BY 3 DESC;
 
--- Test query
 SELECT * FROM retiring_dept;
 		
 
--- -- Drop retiring_pos table
--- DROP TABLE retiring_pos CASCADE;
-
 -- Count retiring employees by department
+
+DROP TABLE IF EXISTS retiring_pos CASCADE;
+
 SELECT title, COUNT(*)
-INTO retiring_pos -- save query results into table
+INTO retiring_pos
 FROM retiring_full
 GROUP BY title
 ORDER BY 2 DESC;
 
--- Test query
 SELECT * FROM retiring_pos;
 
 
--- -- Drop manager_info table
--- DROP TABLE manager_info CASCADE;
-
 -- Get info on each department's manager
+
+DROP TABLE IF EXISTS manager_info CASCADE;
+
 WITH curr_managers AS (
 	SELECT dm.*, d.dept_name
 	FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY dept_no ORDER BY to_date DESC) AS rn
@@ -99,9 +95,8 @@ WITH curr_managers AS (
 )
 SELECT cm.dept_no, cm.dept_name, e.emp_no, e.first_name, e.last_name, e.gender, 
 	e.birth_date, e.hire_date, cm.from_date AS manager_from, cm.to_date AS manager_to
-INTO manager_info -- save query results into table
+INTO manager_info
 FROM curr_managers AS cm
 	JOIN employees AS e ON cm.emp_no = e.emp_no;
 
--- Test query
 SELECT * FROM manager_info;
