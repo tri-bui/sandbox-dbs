@@ -33,19 +33,22 @@ INTO retiring_info
 FROM retiring_emp AS re
 	JOIN (
 		SELECT emp_no, salary, from_date AS salary_from, to_date AS salary_to
-		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no ORDER BY to_date DESC, from_date DESC) AS rn
+		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
+										  ORDER BY to_date DESC, from_date DESC) AS rn
 			  FROM salaries) AS sr
 		WHERE rn = 1
 	) AS s ON re.emp_no = s.emp_no
 	JOIN (
 		SELECT emp_no, title, from_date AS title_from, to_date AS title_to
-		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no ORDER BY to_date DESC, from_date DESC) AS rn
+		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
+										  ORDER BY to_date DESC, from_date DESC) AS rn
 			  FROM titles) AS tr
 		WHERE rn = 1
 	) AS tt ON re.emp_no = tt.emp_no
 	JOIN (
 		SELECT emp_no, dept_no, from_date AS dept_from, to_date AS dept_to
-		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no ORDER BY to_date DESC, from_date DESC) AS rn
+		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
+										  ORDER BY to_date DESC, from_date DESC) AS rn
 			  FROM dept_employees) AS der
 		WHERE rn = 1
 	) AS de ON re.emp_no = de.emp_no
@@ -54,43 +57,46 @@ FROM retiring_emp AS re
 SELECT * FROM retiring_full;
 		
 
--- Count retiring employees by department
+-- Number of retiring employees by department
 
 DROP TABLE IF EXISTS retiring_dept CASCADE;
 
 SELECT dept_no, dept_name, COUNT(*)
 INTO retiring_dept
-FROM retiring_full
+FROM retiring_info
 GROUP BY dept_no, dept_name
 ORDER BY 3 DESC;
 
 SELECT * FROM retiring_dept;
 		
 
--- Count retiring employees by department
+-- Number of retiring employees by position
 
 DROP TABLE IF EXISTS retiring_pos CASCADE;
 
 SELECT title, COUNT(*)
 INTO retiring_pos
-FROM retiring_full
+FROM retiring_info
 GROUP BY title
 ORDER BY 2 DESC;
 
 SELECT * FROM retiring_pos;
 
 
--- Get info on each department's manager
+-- Info on each department's manager
 
 DROP TABLE IF EXISTS manager_info CASCADE;
 
 WITH curr_managers AS (
 	SELECT dm.*, d.dept_name
-	FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY dept_no ORDER BY to_date DESC) AS rn
-		FROM dept_managers) AS dm JOIN departments AS d ON dm.dept_no = d.dept_no
+	FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY dept_no 
+									  ORDER BY to_date DESC) AS rn
+		  FROM dept_managers) AS dm
+		JOIN departments AS d ON dm.dept_no = d.dept_no
 	WHERE dm.rn = 1
 )
-SELECT cm.dept_no, cm.dept_name, e.emp_no, e.first_name, e.last_name, e.gender, 
+SELECT 
+	cm.dept_no, cm.dept_name, e.emp_no, e.first_name, e.last_name, e.gender, 
 	e.birth_date, e.hire_date, cm.from_date AS manager_from, cm.to_date AS manager_to
 INTO manager_info
 FROM curr_managers AS cm
