@@ -24,6 +24,25 @@ SELECT * FROM retiring_emp;
 
 DROP TABLE IF EXISTS retiring_info CASCADE;
 
+WITH s AS (
+	SELECT emp_no, salary, from_date AS salary_from, to_date AS salary_to
+	FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
+									  ORDER BY to_date DESC, from_date DESC) AS rn
+		  FROM salaries) AS sr
+	WHERE rn = 1
+), tt AS (
+	SELECT emp_no, title, from_date AS title_from, to_date AS title_to
+	FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
+									  ORDER BY to_date DESC, from_date DESC) AS rn
+		  FROM titles) AS tr
+	WHERE rn = 1
+), de AS (
+	SELECT emp_no, dept_no, from_date AS dept_from, to_date AS dept_to
+	FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
+									  ORDER BY to_date DESC, from_date DESC) AS rn
+		  FROM dept_employees) AS der
+	WHERE rn = 1
+)
 SELECT 
 	re.emp_no, re.first_name, re.last_name, re.gender, re.birth_date, re.hire_date,
 	tt.title, tt.title_from, tt.title_to,
@@ -31,27 +50,9 @@ SELECT
 	d.dept_no, d.dept_name, de.dept_from, de.dept_to
 INTO retiring_info
 FROM retiring_emp AS re
-	JOIN (
-		SELECT emp_no, salary, from_date AS salary_from, to_date AS salary_to
-		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
-										  ORDER BY to_date DESC, from_date DESC) AS rn
-			  FROM salaries) AS sr
-		WHERE rn = 1
-	) AS s ON re.emp_no = s.emp_no
-	JOIN (
-		SELECT emp_no, title, from_date AS title_from, to_date AS title_to
-		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
-										  ORDER BY to_date DESC, from_date DESC) AS rn
-			  FROM titles) AS tr
-		WHERE rn = 1
-	) AS tt ON re.emp_no = tt.emp_no
-	JOIN (
-		SELECT emp_no, dept_no, from_date AS dept_from, to_date AS dept_to
-		FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY emp_no 
-										  ORDER BY to_date DESC, from_date DESC) AS rn
-			  FROM dept_employees) AS der
-		WHERE rn = 1
-	) AS de ON re.emp_no = de.emp_no
+	JOIN s ON re.emp_no = s.emp_no
+	JOIN tt ON re.emp_no = tt.emp_no
+	JOIN de ON re.emp_no = de.emp_no
 	JOIN departments AS d ON de.dept_no = d.dept_no;
 
 SELECT * FROM retiring_full;
