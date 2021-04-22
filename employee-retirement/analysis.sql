@@ -7,18 +7,14 @@
 
 DROP TABLE IF EXISTS retiring_emp CASCADE;
 
-WITH curr_employees AS (
-	SELECT emp_no, MAX(to_date)
-	FROM dept_employees
-	GROUP BY emp_no
-	HAVING DATE_PART('year', MAX(to_date)) = 9999
-)
-SELECT e.*
-INTO retiring_emp
-FROM curr_employees AS ce
-	JOIN employees AS e ON ce.emp_no = e.emp_no
-WHERE (DATE_PART('year', e.birth_date) BETWEEN 1952 AND 1955)
-	AND (DATE_PART('year', e.hire_date) BETWEEN 1985 AND 1988);
+SELECT *
+FROM employees
+WHERE (emp_no IN ( -- filter for current employees
+		SELECT emp_no 
+		FROM dept_employees 
+		WHERE DATE_PART('year', to_date) = 9999))
+	AND (DATE_PART('year', birth_date) BETWEEN 1952 AND 1955)
+	AND (DATE_PART('year', hire_date) BETWEEN 1985 AND 1988);
 	
 SELECT * FROM retiring_emp;
 
