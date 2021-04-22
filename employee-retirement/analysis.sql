@@ -3,11 +3,12 @@
 	Only employees hired between 1985 and 1988 are eligible for the retirement package */
 	
 	
--- Filter for eligible retiring employees
+-- Eligible retiring employees
 
 DROP TABLE IF EXISTS retiring_emp CASCADE;
 
 SELECT *
+INTO retiring_emp
 FROM employees
 WHERE (emp_no IN ( -- filter for current employees
 		SELECT emp_no 
@@ -19,16 +20,16 @@ WHERE (emp_no IN ( -- filter for current employees
 SELECT * FROM retiring_emp;
 
 
--- Get full info on retiring employees
+-- Full info on retiring employees
 
-DROP TABLE IF EXISTS retiring_full CASCADE;
+DROP TABLE IF EXISTS retiring_info CASCADE;
 
 SELECT 
 	re.emp_no, re.first_name, re.last_name, re.gender, re.birth_date, re.hire_date,
 	tt.title, tt.title_from, tt.title_to,
 	s.salary, s.salary_from, s.salary_to,
 	d.dept_no, d.dept_name, de.dept_from, de.dept_to
-INTO retiring_full
+INTO retiring_info
 FROM retiring_emp AS re
 	JOIN (
 		SELECT emp_no, salary, from_date AS salary_from, to_date AS salary_to
