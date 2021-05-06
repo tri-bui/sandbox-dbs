@@ -5,7 +5,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 from utils import udf_wiki, udf_kaggle, udf_movies, udf_ratings
-from config import sys_vars
+from utils.config import sys_vars
 
 
 def extract(file_path, file_type='csv'):
@@ -214,4 +214,4 @@ def etl_pipeline(wiki_path=sys_vars.wiki_path,
 
 
 if __name__ == '__main__':
-    etl_pipeline()
+    # etl_pipeline()

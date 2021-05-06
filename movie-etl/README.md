@@ -7,13 +7,13 @@ This is an extract-transform-load (ETL) pipeline for movie data from Wikipedia a
 1. Create a PostgreSQL database using pgAdmin or any other PostgreSQL database management tool
 2. Download `ratings.csv` from [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset) and move the file to this project's `data/raw/` subdirectory
 3. In the `notebooks/` subdirectory, create a file named `config.py` and in that file, create a variable named `PSQL_PW` to store the PostgreSQL database password
-4. In the `config/` subdirectory, create a file named `sys_vars.py` to store paths to data files and database properties for the connection string
-5. In `config/sys_vars.py`, create the following variables and assign the corresponding value:
+4. In the `utils/config/` subdirectory, create a file named `sys_vars.py` to store paths to data files and database properties for the connection string
+5. In `utils/config/sys_vars.py`, create the following variables and assign the corresponding value:
     - `wiki_path` - path to the JSON file containing Wikipedia movie data
     - `kaggle_path` - path to the CSV file containing the Kaggle movie data
     - `ratings_path` - path to the CSV file containing the Kaggle rating data
     - `reduced_ratings_path` - path to the CSV file containing the reduced rating data (created by the `transform()` function in the `etl.py` script)
-6. In `config/sys_vars.py`, create a dictionary named `psql` with the following keys and values:
+6. In `utils/config/sys_vars.py`, create a dictionary named `psql` with the following keys and values:
     - `user` - database user, by default 'postgres'
     - `password` - database password
     - `location` - host address, by default '127.0.0.1'
@@ -48,8 +48,8 @@ In this project, data files 1 - 3 were the raw data and files 4 - 6 were generat
 3. `utils/udf_kaggle.py` - functions for cleaning the OMDB movie data (from Kaggle)
 4. `utils/udf_movies.py` - functions for joining and cleaning the movie data from both sources
 5. `utils/udf_ratings.py` - functions for transforming the OMDB rating data (from Kaggle) and joining it into the combined movie data
-6. `config/data_vars` - variables holding key and column names used in the cleaning/transformation process
-7. `config/sys_vars` - variables holding paths to data files and database properties for the connection string
+6. `utils/config/data_vars` - variables holding key and column names used in the cleaning/transformation process
+7. `utils/config/sys_vars` - variables holding paths to data files and database properties for the connection string
 
 ## Requirements
 - Python 3
