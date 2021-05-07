@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import udf_movies
+from utils import udf_movies
 
 
 def drop_cols(movies_df):

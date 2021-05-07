@@ -1,7 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
-import udf_movies
+from utils import udf_movies
 from config.data_vars import keys_to_rename
 
 
