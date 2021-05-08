@@ -17,7 +17,7 @@ def filter_for_movies(movie_data):
     Parameters
     ----------
     movie_data : list[dict]
-        Scraped Wikipedia movie data in JSON format
+        Wikipedia movie data in JSON format
 
     Returns
     -------
@@ -44,7 +44,7 @@ def clean_movie(movie_dict, keys_to_rename=keys_to_rename):
     movie_dict : dict
         Record to clean
     keys_to_rename : dict, optional
-        mapping of old key name to new key name, by default `keys_to_rename` 
+        Mapping of old key name to new key name, by default `keys_to_rename` 
         from the `config.data_vars` module
 
     Returns
@@ -53,7 +53,7 @@ def clean_movie(movie_dict, keys_to_rename=keys_to_rename):
         Clean movie record
     """
     
-    # Create empty dictionary to hold clean data
+    # Empty dictionary to hold clean data
     clean_dict = {}
     
     # Add keys to dictionary
@@ -90,7 +90,7 @@ def obj_to_str(obj):
 def parse_budget(s):
 
     """
-    Parse a `budget` string and convert it to a float.
+    Parse a `budget` string and convert it to numeric.
 
     Parameters
     ----------
@@ -103,7 +103,7 @@ def parse_budget(s):
         Numeric `budget` value
     """
     
-    # Null check
+    # Check if value is null or already a float 
     if isinstance(s, float):
         return s
     
@@ -112,29 +112,28 @@ def parse_budget(s):
     
     # Convert to float
     if 'mil' in s:
-        f = float(s.replace('mil', '')) * 1e6 # million
+        return float(s.replace('mil', '')) * 1e6 # million
     else:
-        f = float(s)
-    return f
+        return float(s)
 
 
 def parse_box_office(s):
 
     """
-    Parse a `box_office` string and convert it to a float.
+    Parse a `box_office` string and convert it to numeric.
 
     Parameters
     ----------
     s : str or float
-        String `box_office` value
+        `box_office` value
 
     Returns
     -------
     Float
-        Float `box_office` value
+        Numeric `box_office` value
     """
     
-    # Null check
+    # Check if value is null or already a float
     if isinstance(s, float):
         return s
     
@@ -143,35 +142,34 @@ def parse_box_office(s):
     
     # Convert to float
     if 'k' in s:
-        f = float(s.replace('k', '')) * 1e3 # thousand
+        return float(s.replace('k', '')) * 1e3 # thousand
     elif 'm' in s:
-        f = float(s.replace('m', '')) * 1e6 # million
+        return float(s.replace('m', '')) * 1e6 # million
     elif 'b' in s:
-        f = float(s.replace('b', '')) * 1e9 # billion
+        return float(s.replace('b', '')) * 1e9 # billion
     elif '.' in s:
-        f = float(s.replace('.', '')) # for numbers using "." as a thousand-separator
+        return float(s.replace('.', '')) # for numbers using "." as a thousand-separator
     else:
-        f = float(s)
-    return f
+        return float(s)
 
 
 def parse_duration(s):
     
     """
-    Parse a `duration` string and convert it to an integer.
+    Parse a `duration` string and convert it to numeric.
 
     Parameters
     ----------
     s : str or float
-        String `duration` value
+        `duration` value
 
     Returns
     -------
     Int
-        Integer `duration` value
+        Numeric `duration` value
     """
     
-    # Null check
+    # Check if value is null or already a float
     if isinstance(s, float):
         return s
     
@@ -184,10 +182,9 @@ def parse_duration(s):
     if match: # if time is in hours
         i = int(match.group(1)) * 60 # hours to minutes
         if match.group(3):
-            i += int(match.group(3)) # add minutes
+            return i + int(match.group(3)) # add minutes
     else: # if time is in minutes
-        i = int(s)
-    return i
+        return int(s)
 
 
 """ ### RECASTING ### """
@@ -196,7 +193,7 @@ def parse_duration(s):
 def release_date_to_dt(release_date):
 
     """
-    Parse `release_date` in the Wikipedia data and convert it to datetime type.
+    Parse `release_date` in the Wikipedia data and convert it to datetime.
 
     Parameters
     ----------
@@ -206,7 +203,7 @@ def release_date_to_dt(release_date):
     Returns
     -------
     Pandas series[datetime]
-        `release_date` column as a datetime type
+        `release_date` column as datetime
     """
 
     # Convert all values to strings
@@ -232,7 +229,7 @@ def release_date_to_dt(release_date):
 def budget_to_num(budget):
 
     """
-    Parse `budget` in the Wikipedia data and convert it to numeric type.
+    Parse `budget` in the Wikipedia data and convert it to numeric.
 
     Parameters
     ----------
@@ -242,7 +239,7 @@ def budget_to_num(budget):
     Returns
     -------
     Pandas series[float]
-        `budget` column as a numeric type
+        `budget` column as numeric
     """
 
     # Convert all values to strings
@@ -271,7 +268,7 @@ def budget_to_num(budget):
 def box_office_to_num(box_office):
 
     """
-    Parse `box_office` in the Wikipedia data and convert it to numeric type.
+    Parse `box_office` in the Wikipedia data and convert it to numeric.
 
     Parameters
     ----------
@@ -306,7 +303,7 @@ def box_office_to_num(box_office):
 def duration_to_num(duration):
 
     """
-    Parse `duration` in the Wikipedia data and convert it to numeric type.
+    Parse `duration` in the Wikipedia data and convert it to numeric.
 
     Parameters
     ----------
