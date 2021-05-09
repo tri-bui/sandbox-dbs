@@ -43,7 +43,7 @@ def recast_cols(movies_df):
     Returns
     -------
     Pandas dataframe
-        Kaggle movie data columns recasted
+        Kaggle movie data with columns recasted
     """
 
     # Recast `release_date` to datetime type
@@ -55,6 +55,7 @@ def recast_cols(movies_df):
 
     # Recast `popularity` to float type
     movies_df['popularity'] = movies_df['popularity'].astype(float)
+    
     return movies_df
 
 
