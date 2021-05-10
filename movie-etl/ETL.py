@@ -1,5 +1,5 @@
-import datetime as dt
 import json
+import datetime as dt
 import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
@@ -135,11 +135,11 @@ def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars
     """
     
     # Connection string
-    user = uri_properties['user']
-    password = uri_properties['password']
-    location = uri_properties['location']
-    port = uri_properties['port']
-    database = uri_properties['database']
+    user = sys_vars.psql['user']
+    password = sys_vars.psql['password']
+    location = sys_vars.psql['location']
+    port = sys_vars.psql['port']
+    database = sys_vars.psql['database']
     uri = f'postgres://{user}:{password}@{location}:{port}/{database}'
 
     # Create database engine
