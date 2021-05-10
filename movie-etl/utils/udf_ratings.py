@@ -50,7 +50,7 @@ def join_data(movies_df, ratings_df):
     Returns
     -------
     Pandas dataframe
-        Movie data with aggregate rating data
+        Movie data with aggregated (by count) rating data
     """
 
     # Count ratings by movie
