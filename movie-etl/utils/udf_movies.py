@@ -100,8 +100,8 @@ def drop_redundant_cols(movies_df):
     ]
 
     # Fill the first column and drop the second column for each pair
-    for pair in redundant_pairs:
-        movies_df = filla_dropb(pair[0], pair[1], movies_df)
+    for a, b in redundant_pairs:
+        movies_df = filla_dropb(a, b, movies_df)
     return movies_df
 
 
@@ -127,8 +127,8 @@ def clean_cols(movies_df, col_order=col_order, col_names=col_names):
         Movie data with clean column names
     """
 
-    # Column pairs to rename (old name: new name)
-    rename_pairs = {old: new for old, new in zip(col_order, col_names)}
+    # Column pairs to rename {old name: new name}
+    rename_pairs = dict(zip(col_order, col_names))
 
     # Rename and reorder columns
     movies_df = movies_df.rename(rename_pairs, axis=1)
