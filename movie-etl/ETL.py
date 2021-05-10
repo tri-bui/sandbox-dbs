@@ -133,7 +133,7 @@ def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars
     location = uri_properties['location']
     port = uri_properties['port']
     database = uri_properties['database']
-    uri = f'postgres://{user}:{password}@{location}:{port}/{database}'
+    uri = f'postgresql://{user}:{password}@{location}:{port}/{database}'
 
     # Create database engine
     engine = create_engine(uri)
@@ -144,7 +144,7 @@ def load(data, table='movies', n_ratings=0, n_chunks=10, uri_properties=sys_vars
         chunksize = round(n_ratings, -len(str(n_ratings)) + 1) // n_chunks # chunk size
         for chunk in pd.read_csv(data, chunksize=chunksize): # read in chunks
             unloaded = min(loaded + chunksize, n_ratings) # upper limit of loading range
-            print('Loading rows', loaded, 'to', unloaded, end=' | ') # print progress
+            print(f'Loading rows {loaded:7} to {unloaded:7}', end=' | ') # print progress
             chunk.to_sql(table, engine, if_exists='append') # load chunk
             loaded += chunksize # update lower limit of loading range
             print((dt.datetime.now() - start), 'elapsed') # print elapsed time
