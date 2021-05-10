@@ -11,28 +11,21 @@ from config import sys_vars
 def extract(file_path, file_type='csv'):
 
     """
-    Args:
-        [1] file_path (str) - path to data file
-        [2] file_type (str) - "csv" or "json"
-
-    Returns:
-        Pandas dataframe if importing from a csv file or list of 
-        dictionaries if importing from a json file.
-    Import data from a csv or json file.
+    Read data from a csv or json file.
 
     Parameters
     ----------
     file_path : str
         path to data file
     file_type : str, optional
-        csv or json, by default 'csv'
+        'csv' or 'json', by default 'csv'
 
     Returns
     -------
     Pandas dataframe 
         If reading data from a CSV file
     List[dict]
-        If readinng data from a json file
+        If reading data from a json file
 
     Raises
     ------
